@@ -1,0 +1,16 @@
+[action_转换]
+text:变成敌对
+price:0
+pos:-5
+buildSpeed:0
+switchToAggressiveTeam:true
+displayType:action
+alwaysSinglePress:true
+[action_转换2]
+text:变成中立
+price:0
+pos:-5
+buildSpeed:0
+switchToNeutralTeam:true
+displayType:action
+alwaysSinglePress:true
