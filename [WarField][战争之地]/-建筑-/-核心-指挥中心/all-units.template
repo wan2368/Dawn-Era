@@ -1,0 +1,3898 @@
+
+
+
+
+#建筑
+
+[core]
+#energyStartingPercentage:0
+explodeTypeOnDeath:large
+armour:10
+copyFrom:ROOT:[WarField][战争之地]/-建筑-/all-units.template
+fogOfWarSightRange:14
+nanoRange:0
+autoTriggerCheckRate:every8Frames
+defineUnitMemory:float 攻击距离,float 伤害乘数,float 护盾,float 视野,float 装甲,float 生命,float 间隔
+fogOfWarSightRangeWhileNotBuilt=${int(core.fogOfWarSightRange*0.5)}
+energyMax:0
+autoTriggerCooldownTime:30
+numBitsOnDeath=${int(core.radius*0.3)}
+maxShield:0
+shieldRegen:0.1
+shieldDisplayOnlyDeflection:true
+shieldDeflectionDisplayRate:0.5
+armourMinDamageToKeep:0
+soundOnNewSelection:ROOT:[WarField][战争之地]/-shared-/-音效-/choose.wav
+soundOnAttackOrder:ROOT:[WarField][战争之地]/-shared-/-音效-/attack.wav
+
+@memory jjhj:number
+
+@memory jzsd:number
+@memory xfjl:number
+@memory guasha:number
+@memory zib1:boolean
+@memory zib2:boolean
+@memory syds1:number
+@memory 停火:number
+
+@memory 鹰眼:number
+@memory 防御者:number
+@memory 疾风:number
+@memory 守财奴:number
+@memory 巨兽:number
+@memory 暴君:number
+@memory 镜像:number
+@memory jsxg:number
+@memory jsxg2:number
+@memory jsxg3:number
+@memory jxxg:boolean
+@memory bjxg:number
+@memory yyxg:number
+@memory yyxg2:number
+@memory fyzxg:number
+@memory fyzxg2:number
+@memory scnxg:number
+@memory jfxg2:number
+
+@memory sjsh:number
+@memory sjsm:number
+@memory sjsc:number
+@memory sjdy:number
+@memory sjdrl:number
+@memory sjjzsd:number
+@memory 弹容量:number
+
+@memory 弹容量定量:boolean
+
+@memory 鹰眼到防御者:number
+@memory 鹰眼到镜像:number
+@memory 防御者到疾风:number
+@memory 防御者到守财奴:number
+@memory 疾风到守财奴:number
+@memory 疾风到巨兽:number
+@memory 巨兽到暴君:number
+@memory 巨兽到镜像:number
+@memory 暴君到镜像:number
+@memory 暴君到鹰眼:number
+@memory 镜像到守财奴:number
+@memory 镜像到防御者:number
+
+@memory 守财奴帮助:number
+
+[hiddenAction_守财帮助开启]
+autoTrigger:if self.numberOfUnitsInAllyNotOwnTeam(withTag='守财奴',greaterThan=0) and memory.守财奴帮助 != 1
+setUnitMemory:守财奴帮助=1
+addResources:3000,pt=500,ts=200,dx=300,sy:100,rk:60,zxf=20
+showMessageToPlayer:AI:已获得队友守财奴的额外加成
+
+[hiddenAction_鹰眼开启l]
+autoTrigger:if self.globalTeamTags(includes="鹰眼") and not self.hasUnitInTeam(withTag='鹰眼',greaterThan=0)
+spawnUnits:鹰眼(offsetX=35,gridAlign=true)
+[hiddenAction_防御者开启l]
+autoTrigger:if self.globalTeamTags(includes="防御者") and not self.hasUnitInTeam(withTag='防御者',greaterThan=0)
+spawnUnits:防御者(offsetX=35,gridAlign=true)
+[hiddenAction_疾风开启l]
+autoTrigger:if self.globalTeamTags(includes="疾风") and not self.hasUnitInTeam(withTag='疾风',greaterThan=0)
+spawnUnits:疾风(offsetX=35,gridAlign=true)
+[hiddenAction_守财奴开启l]
+autoTrigger:if self.globalTeamTags(includes="守财奴") and not self.hasUnitInTeam(withTag='守财奴',greaterThan=0)
+spawnUnits:守财奴(offsetX=35,gridAlign=true)
+[hiddenAction_巨兽开启l]
+autoTrigger:if self.globalTeamTags(includes="巨兽") and not self.hasUnitInTeam(withTag='巨兽',greaterThan=0)
+spawnUnits:巨兽(offsetX=35,gridAlign=true)
+[hiddenAction_暴君开启l]
+autoTrigger:if self.globalTeamTags(includes="暴君") and not self.hasUnitInTeam(withTag='暴君',greaterThan=0)
+spawnUnits:暴君指挥官(offsetX=35,gridAlign=true)
+[hiddenAction_镜像开启l]
+autoTrigger:if self.globalTeamTags(includes="镜像") and not self.hasUnitInTeam(withTag='镜像',greaterThan=0)
+spawnUnits:镜像(offsetX=35,gridAlign=true)
+
+[hiddenAction_鹰眼防御开启ll]
+autoTrigger:if self.globalTeamTags(includes="防御者") and self.numberOfUnitsInAllyNotOwnTeam(withTag='鹰眼',greaterThan=0) and memory.鹰眼到防御者 != 1
+showMessageToPlayer:AI:已获得队友鹰眼的额外加成
+[hiddenAction_鹰眼镜像开启ll]
+autoTrigger:if self.globalTeamTags(includes="镜像") and self.numberOfUnitsInAllyNotOwnTeam(withTag='鹰眼',greaterThan=0) and memory.鹰眼到镜像 != 1
+showMessageToPlayer:AI:已获得队友鹰眼的额外加成
+[hiddenAction_防御疾风开启ll]
+autoTrigger:if self.globalTeamTags(includes="疾风") and self.numberOfUnitsInAllyNotOwnTeam(withTag='防御者',greaterThan=0) and memory.防御者到疾风 != 1
+showMessageToPlayer:AI:已获得队友防御者的额外加成
+[hiddenAction_防御守财奴开启ll]
+autoTrigger:if self.globalTeamTags(includes="守财奴") and self.numberOfUnitsInAllyNotOwnTeam(withTag='防御者',greaterThan=0) and memory.防御者到守财奴 != 1
+showMessageToPlayer:AI:已获得队友防御者的额外加成
+[hiddenAction_疾风守财奴开启ll]
+autoTrigger:if self.globalTeamTags(includes="守财奴") and self.numberOfUnitsInAllyNotOwnTeam(withTag='疾风',greaterThan=0) and memory.疾风到守财奴 != 1
+showMessageToPlayer:AI:已获得队友疾风的额外加成
+[hiddenAction_疾风巨兽开启ll]
+autoTrigger:if self.globalTeamTags(includes="疾风") and self.numberOfUnitsInAllyNotOwnTeam(withTag='巨兽',greaterThan=0) and memory.疾风到巨兽 != 1
+showMessageToPlayer:AI:已获得队友疾风的额外加成
+[hiddenAction_巨兽暴君开启ll]
+autoTrigger:if self.globalTeamTags(includes="暴君") and self.numberOfUnitsInAllyNotOwnTeam(withTag='巨兽',greaterThan=0) and memory.巨兽到暴君 != 1
+showMessageToPlayer:AI:已获得队友巨兽的额外加成
+[hiddenAction_巨兽镜像开启ll]
+autoTrigger:if self.globalTeamTags(includes="镜像") and self.numberOfUnitsInAllyNotOwnTeam(withTag='巨兽',greaterThan=0) and memory.巨兽到镜像 != 1
+showMessageToPlayer:AI:已获得队友巨兽的额外加成
+[hiddenAction_暴君镜像开启ll]
+autoTrigger:if self.globalTeamTags(includes="镜像") and self.numberOfUnitsInAllyNotOwnTeam(withTag='暴君',greaterThan=0) and memory.暴君到镜像 != 1
+showMessageToPlayer:AI:已获得队友暴君的额外加成
+[hiddenAction_暴君鹰眼开启ll]
+autoTrigger:if self.globalTeamTags(includes="鹰眼") and self.numberOfUnitsInAllyNotOwnTeam(withTag='暴君',greaterThan=0) and memory.暴君到鹰眼 != 1
+showMessageToPlayer:AI:已获得队友暴君的额外加成
+[hiddenAction_镜像守财奴开启ll]
+autoTrigger:if self.globalTeamTags(includes="守财奴") and self.numberOfUnitsInAllyNotOwnTeam(withTag='镜像',greaterThan=0) and memory.镜像到守财奴 != 1
+showMessageToPlayer:AI:已获得队友镜像的额外加成
+[hiddenAction_镜像防御者开启ll]
+autoTrigger:if self.globalTeamTags(includes="防御者") and self.numberOfUnitsInAllyNotOwnTeam(withTag='镜像',greaterThan=0) and memory.镜像到防御者 != 1
+showMessageToPlayer:AI:已获得队友镜像的额外加成
+
+
+
+[hiddenAction_鹰眼防御开启]
+autoTrigger:if self.globalTeamTags(includes="防御者") and self.numberOfUnitsInAllyNotOwnTeam(withTag='鹰眼',greaterThan=0) and memory.鹰眼到防御者 != 1
+setUnitMemory:鹰眼到防御者=1
+[hiddenAction_鹰眼镜像开启]
+autoTrigger:if self.globalTeamTags(includes="镜像") and self.numberOfUnitsInAllyNotOwnTeam(withTag='鹰眼',greaterThan=0) and memory.鹰眼到镜像 != 1
+setUnitMemory:鹰眼到镜像=1
+[hiddenAction_防御疾风开启]
+autoTrigger:if self.globalTeamTags(includes="疾风") and self.numberOfUnitsInAllyNotOwnTeam(withTag='防御者',greaterThan=0) and memory.防御者到疾风 != 1
+setUnitMemory:防御者到疾风=1
+[hiddenAction_防御守财奴开启]
+autoTrigger:if self.globalTeamTags(includes="守财奴") and self.numberOfUnitsInAllyNotOwnTeam(withTag='防御者',greaterThan=0) and memory.防御者到守财奴 != 1
+setUnitMemory:防御者到守财奴=1
+[hiddenAction_疾风守财奴开启]
+autoTrigger:if self.globalTeamTags(includes="守财奴") and self.numberOfUnitsInAllyNotOwnTeam(withTag='疾风',greaterThan=0) and memory.疾风到守财奴 != 1
+setUnitMemory:疾风到守财奴=1
+[hiddenAction_疾风巨兽开启]
+autoTrigger:if self.globalTeamTags(includes="疾风") and self.numberOfUnitsInAllyNotOwnTeam(withTag='巨兽',greaterThan=0) and memory.疾风到巨兽 != 1
+setUnitMemory:疾风到巨兽=1
+[hiddenAction_巨兽暴君开启]
+autoTrigger:if self.globalTeamTags(includes="暴君") and self.numberOfUnitsInAllyNotOwnTeam(withTag='巨兽',greaterThan=0) and memory.巨兽到暴君 != 1
+setUnitMemory:巨兽到暴君=1
+[hiddenAction_巨兽镜像开启]
+autoTrigger:if self.globalTeamTags(includes="镜像") and self.numberOfUnitsInAllyNotOwnTeam(withTag='巨兽',greaterThan=0) and memory.巨兽到镜像 != 1
+setUnitMemory:巨兽到镜像=1
+[hiddenAction_暴君镜像开启]
+autoTrigger:if self.globalTeamTags(includes="镜像") and self.numberOfUnitsInAllyNotOwnTeam(withTag='暴君',greaterThan=0) and memory.暴君到镜像 != 1
+setUnitMemory:暴君到镜像=1
+[hiddenAction_暴君鹰眼开启]
+autoTrigger:if self.globalTeamTags(includes="鹰眼") and self.numberOfUnitsInAllyNotOwnTeam(withTag='暴君',greaterThan=0) and memory.暴君到鹰眼 != 1
+setUnitMemory:暴君到鹰眼=1
+[hiddenAction_镜像守财奴开启]
+autoTrigger:if self.globalTeamTags(includes="守财奴") and self.numberOfUnitsInAllyNotOwnTeam(withTag='镜像',greaterThan=0) and memory.镜像到守财奴 != 1
+setUnitMemory:镜像到守财奴=1
+[hiddenAction_镜像防御者开启]
+autoTrigger:if self.globalTeamTags(includes="防御者") and self.numberOfUnitsInAllyNotOwnTeam(withTag='镜像',greaterThan=0) and memory.镜像到防御者 != 1
+setUnitMemory:镜像到防御者=1
+
+
+[hiddenAction_属性赋值]
+autoTrigger:true
+setUnitStats:maxAttackRange=memory.攻击距离,maxShield=memory.护盾,armour=memory.装甲,fogOfWarSightRange=memory.视野,shootDamageMultiplier=memory.伤害乘数,shootDelayMultiplier=memory.间隔
+
+#---伤害修正---
+[projectile_test]
+directDamage:0
+areaRadius:0
+life:0
+tags:NONE
+speed:0
+image:NONE
+drawSize:0.01
+explodeEffect:NONE
+mutator0_ifUnitWithTags:armourT1
+mutator0_directDamageMultiplier:0.9
+mutator0_areaDamageMultiplier:0.9
+mutator1_ifUnitWithTags:armourT2
+mutator1_directDamageMultiplier:0.8
+mutator1_areaDamageMultiplier:0.8
+mutator2_ifUnitWithTags:armourT3
+mutator2_directDamageMultiplier:0.7
+mutator2_areaDamageMultiplier:0.7
+mutator3_ifUnitWithTags:armourT4
+mutator3_directDamageMultiplier:0.5
+mutator3_areaDamageMultiplier:0.5
+
+mutator4_ifUnitWithTags:hpT1
+mutator4_directDamageMultiplier:1.05
+mutator4_areaDamageMultiplier:1.05
+mutator5_ifUnitWithTags:hpT2
+mutator5_directDamageMultiplier:1.15
+mutator5_areaDamageMultiplier:1.15
+mutator6_ifUnitWithTags:hpT3
+mutator6_directDamageMultiplier:1.25
+mutator6_areaDamageMultiplier:1.25
+mutator7_ifUnitWithTags:hpT4
+mutator7_directDamageMultiplier:1.4
+mutator7_areaDamageMultiplier:1.4
+
+mutator8_ifUnitWithTags:shieldT1
+mutator8_directDamageMultiplier:1.05
+mutator8_areaDamageMultiplier:1.05
+mutator9_ifUnitWithTags:shieldT2
+mutator9_directDamageMultiplier:1.15
+mutator9_areaDamageMultiplier:1.15
+mutator10_ifUnitWithTags:shieldT3
+mutator10_directDamageMultiplier:1.25
+mutator10_areaDamageMultiplier:1.25
+mutator11_ifUnitWithTags:shieldT4
+mutator11_directDamageMultiplier:1.4
+mutator11_areaDamageMultiplier:1.4
+
+mutator12_ifUnitWithTags:损坏
+mutator12_directDamageMultiplier:0.7
+mutator12_areaDamageMultiplier:0.7
+
+[projectile_test2]
+directDamage:0
+areaRadius:0
+life:0
+tags:NONE
+speed:0
+image:NONE
+drawSize:0.01
+explodeEffect:CUSTOM:null
+mutator0_ifUnitWithTags:armourT1
+mutator0_directDamageMultiplier:1.2
+mutator0_areaDamageMultiplier:1.2
+mutator1_ifUnitWithTags:armourT2
+mutator1_directDamageMultiplier:1.4
+mutator1_areaDamageMultiplier:1.4
+mutator2_ifUnitWithTags:armourT3
+mutator2_directDamageMultiplier:1.6
+mutator2_areaDamageMultiplier:1.6
+mutator3_ifUnitWithTags:armourT4
+mutator3_directDamageMultiplier:2
+mutator3_areaDamageMultiplier:2
+
+mutator4_ifUnitWithTags:损坏
+mutator4_directDamageMultiplier:1.5
+mutator4_areaDamageMultiplier:1.5
+
+#----类型装甲----
+
+[hiddenAction_T0级装甲]
+autoTrigger:if memory.装甲 < 15 and self.tags(includes='armourT1') or memory.装甲 < 15 and self.tags(includes='armourT2') or memory.装甲 < 15 and self.tags(includes='armourT3') or memory.装甲 < 15 and self.tags(includes='armourT4')
+temporarilyRemoveTags:armourT2,armourT3,armourT4,armourT1
+
+[hiddenAction_T1级装甲]
+autoTrigger:if memory.装甲 >= 20 and memory.装甲 < 40 and not self.tags(includes='armourT1')
+temporarilyAddTags:armourT1
+temporarilyRemoveTags:armourT2,armourT3,armourT4
+
+[hiddenAction_T2级装甲]
+autoTrigger:if memory.装甲 >= 40 and memory.装甲 < 60 and not self.tags(includes='armourT2')
+temporarilyAddTags:armourT2
+temporarilyRemoveTags:armourT3,armourT1,armourT4
+
+[hiddenAction_T3级装甲]
+autoTrigger:if memory.装甲 >= 60 and memory.装甲 < 85 and not self.tags(includes='armourT3')
+temporarilyAddTags:armourT3
+temporarilyRemoveTags:armourT2,armourT1,armourT4
+
+[hiddenAction_T4级装甲]
+autoTrigger:if memory.装甲 >= 85 and not self.tags(includes='armourT4')
+temporarilyAddTags:armourT4
+temporarilyRemoveTags:armourT2,armourT1,armourT3
+
+#---生命类型--
+
+[hiddenAction_T0级生命]
+autoTrigger:if memory.生命 < ${core.maxHp}*1.5 and self.tags(includes='hpT1') or memory.生命 < ${core.maxHp}*1.5 and self.tags(includes='hpT2') or memory.生命 < ${core.maxHp}*1.5 and self.tags(includes='hpT3') or memory.生命 < ${core.maxHp}*1.5 and self.tags(includes='hpT4')
+temporarilyRemoveTags:hpT2,hpT3,hpT4,hpT1
+
+[hiddenAction_T1级生命]
+autoTrigger:if memory.生命 >= ${core.maxHp}*1.5 and memory.生命 < ${core.maxHp}*2 and not self.tags(includes='hpT1')
+temporarilyAddTags:hpT1
+temporarilyRemoveTags:hpT2,hpT3,hpT4
+
+[hiddenAction_T2级生命]
+autoTrigger:if memory.生命 >= ${core.maxHp}*2 and memory.生命 < ${core.maxHp}*3 and not self.tags(includes='hpT2')
+temporarilyAddTags:hpT2
+temporarilyRemoveTags:hpT1,hpT3,hpT4
+
+[hiddenAction_T3级生命]
+autoTrigger:if memory.生命 >= ${core.maxHp}*3 and memory.生命 < ${core.maxHp}*4 and not self.tags(includes='hpT3')
+temporarilyAddTags:hpT3
+temporarilyRemoveTags:hpT2,hpT1,hpT4
+
+[hiddenAction_T4级生命]
+autoTrigger:if memory.生命 >= ${core.maxHp}*4 and not self.tags(includes='hpT4')
+temporarilyAddTags:hpT4
+temporarilyRemoveTags:hpT2,hpT3,hpT1
+
+#---护盾类型---
+
+#---初始没有护盾--
+
+[hiddenAction_T0级护盾]
+autoTrigger:if memory.护盾 == 0 and self.tags(includes='shieldT1') or memory.护盾 == 0 and self.tags(includes='shieldT2') or memory.护盾 == 0 and self.tags(includes='shieldT3') or memory.护盾 == 0 and self.tags(includes='shieldT4')
+temporarilyRemoveTags:shieldT2,shieldT3,shieldT4,shieldT1
+
+[hiddenAction_T1级护盾]
+autoTrigger:if memory.护盾 > 0 and memory.护盾 < 500 and not self.tags(includes='shieldT1') and ${core.maxShield} == 0
+temporarilyAddTags:shieldT1
+temporarilyRemoveTags:shieldT2,shieldT3,shieldT4
+
+[hiddenAction_T2级护盾]
+autoTrigger:if memory.护盾 >= 500 and memory.护盾 < 1000 and not self.tags(includes='shieldT2') and ${core.maxShield} == 0
+temporarilyAddTags:shieldT2
+temporarilyRemoveTags:shieldT1,shieldT3,shieldT4
+
+[hiddenAction_T3级护盾]
+autoTrigger:if memory.护盾 >= 1000 and memory.护盾 < 1500 and not self.tags(includes='shieldT3') and ${core.maxShield} == 0
+temporarilyAddTags:shieldT3
+temporarilyRemoveTags:shieldT2,shieldT1,shieldT4
+
+[hiddenAction_T4级护盾]
+autoTrigger:if memory.护盾 >= 1500 and not self.tags(includes='shieldT4') and ${core.maxShield} == 0
+temporarilyAddTags:shieldT4
+temporarilyRemoveTags:shieldT2,shieldT3,shieldT1
+
+#---自身初始有护盾---
+
+[hiddenAction_T0级护盾l]
+autoTrigger:if memory.护盾 <= ${core.maxShield} and self.tags(includes='shieldT1') or memory.护盾 <= ${core.maxShield} and self.tags(includes='shieldT2') or memory.护盾 <= ${core.maxShield} and self.tags(includes='shieldT3') or memory.护盾 <= ${core.maxShield} and self.tags(includes='shieldT4')
+temporarilyRemoveTags:shieldT2,shieldT3,shieldT4,shieldT1
+
+[hiddenAction_T1级护盾l]
+autoTrigger:if memory.护盾 > ${core.maxShield} and memory.护盾 < ${core.maxShield}*1.5 and not self.tags(includes='shieldT1') and ${core.maxShield} > 0
+temporarilyAddTags:shieldT1
+temporarilyRemoveTags:shieldT2,shieldT3,shieldT4
+
+[hiddenAction_T2级护盾l]
+autoTrigger:if memory.护盾 >= ${core.maxShield}*1.5 and memory.护盾 < ${core.maxShield}*2 and not self.tags(includes='shieldT2') and ${core.maxShield} > 0
+temporarilyAddTags:shieldT2
+temporarilyRemoveTags:shieldT1,shieldT3,shieldT4
+
+[hiddenAction_T3级护盾l]
+autoTrigger:if memory.护盾 >= ${core.maxShield}*2 and memory.护盾 < ${core.maxShield}*3 and not self.tags(includes='shieldT3') and ${core.maxShield} > 0
+temporarilyAddTags:shieldT3
+temporarilyRemoveTags:shieldT2,shieldT1,shieldT4
+
+[hiddenAction_T4级护盾l]
+autoTrigger:if memory.护盾 >= ${core.maxShield}*3 and not self.tags(includes='shieldT4') and ${core.maxShield} > 0
+temporarilyAddTags:shieldT4
+temporarilyRemoveTags:shieldT2,shieldT3,shieldT1
+
+
+
+[hiddenAction_纳米科技]
+autoTriggerOnEvent:destroyed
+requireConditional:if self.globalTeamTags(includes='纳米科技')
+spawnUnits:纳米*${int(core.radius*0.1+1)}(offsetRandomX=${core.radius},offsetRandomY=${core.radius})
+
+[hiddenAction_磐石科技]
+autoTriggerOnEvent:destroyed
+requireConditional:if self.globalTeamTags(includes='磐石科技')
+spawnUnits:磐石*${int(core.radius*0.1+1)}(offsetRandomX=${core.radius},offsetRandomY=${core.radius})
+
+[hiddenAction_鹰眼开启]
+autoTrigger:if self.globalTeamTags(includes="鹰眼") and memory.鹰眼 != 1
+setUnitMemory:鹰眼=1
+
+[hiddenAction_防御者开启]
+autoTrigger:if self.globalTeamTags(includes="防御者") and memory.防御者 != 1
+setUnitMemory:防御者=1
+setResourcesWithLogic:hfjs:1
+
+[hiddenAction_疾风开启]
+autoTrigger:if self.globalTeamTags(includes="疾风") and memory.疾风 != 1
+setUnitMemory:疾风=1
+
+[hiddenAction_守财奴开启]
+autoTrigger:if self.globalTeamTags(includes="守财奴") and memory.守财奴 != 1
+setUnitMemory:守财奴=1
+
+[hiddenAction_巨兽开启]
+autoTrigger:if self.globalTeamTags(includes="巨兽") and memory.巨兽 != 1
+setUnitMemory:巨兽=1
+setResourcesWithLogic:hfjs:1
+
+[hiddenAction_暴君开启]
+autoTrigger:if self.globalTeamTags(includes="暴君") and memory.暴君 != 1
+setUnitMemory:暴君=1
+
+[hiddenAction_镜像开启]
+autoTrigger:if self.globalTeamTags(includes="镜像") and memory.镜像 != 1
+setUnitMemory:镜像=1
+#spawnUnits:${core.name}*1(addResources=fl:1)
+
+[hiddenAction_巨兽效果]
+autoTriggerOnEvent:tookDamage
+requireConditional:if memory.巨兽 == 1
+addResourcesWithLogic:credits:memory.生命*-0.1
+setUnitMemory:jsxg=rnd(0,10)
+
+[hiddenAction_巨兽效果2]
+autoTriggerOnEvent:tookDamage
+requireConditional:if memory.jsxg > 5.0 and memory.jsxg < 5.1
+addResources:hp:-99999
+
+
+[hiddenAction_防御者荆棘]
+autoTrigger:if attacking.hasTakenDamage(withinSeconds=0.5) and attacking.globalTeamTags(includes="防御者")
+addResources:hp:-10
+
+[hiddenAction_守财奴击杀]
+autoTriggerOnEvent:killedAnyUnit
+requireConditional:if self.globalTeamTags(includes="守财奴")
+addResourcesWithLogic:credits=memory.生命*0.2,djds1:20,djds=20,pt:5,dx:5,ts:5
+
+[hiddenAction_守财奴回收利用]
+autoTriggerOnEvent:destroyed
+requireConditional:if self.globalTeamTags(includes="守财奴")
+addResourcesWithLogic:credits=${core.maxHp}*0.5
+
+
+
+#---巨兽生命---
+
+[hiddenAction_巨兽生命效果]
+requireConditional:if self.globalTeamTags(includes="巨兽")
+autoTriggerOnEvent:killedAnyUnit
+autoTrigger:if attacking.hasTakenDamage(withinSeconds=0.2) and memory.巨兽 == 1
+setUnitMemory:jsxg2=int(rnd(0,100))
+
+[hiddenAction_巨兽生命提升]
+autoTrigger:if self.globalTeamTags(includes="巨兽") and memory.jsxg2 >= 35 and memory.jsxg2 <= 44
+setUnitMemory:jsxg3=memory.jsxg3+1,jsxg2=int(rnd(0,100))
+
+#---守财奴效果---
+
+[hiddenAction_守财奴随机效果]
+autoTrigger:if attacking.hasTakenDamage(withinSeconds=0.2) and memory.守财奴 == 1
+setUnitMemory:scnxg=int(rnd(0,100))
+
+[hiddenAction_守财奴随机击杀]
+autoTriggerOnEvent:killedAnyUnit
+requireConditional:if self.globalTeamTags(includes="守财奴") and memory.scnxg >= 35 and memory.scnxg <= 44
+addResourcesWithLogic:sjd:2
+setUnitMemory:scnxg=int(rnd(0,100))
+
+#---镜像效果---
+
+[hiddenAction_镜像复活]
+autoTrigger:if self.globalTeamTags(includes="镜像") and self.hp > 0 and self.hp < ${core.maxHp*0.2} and memory.jxxg != true
+addResources:hp:99999,shield:99999,energy:99999
+setUnitMemory:jxxg=true
+
+#---暴君效果---
+
+[hiddenAction_暴君效果]
+autoTrigger:if attacking.hasTakenDamage(withinSeconds=0.2) and memory.暴君 == 1
+setUnitMemory:bjxg=int(rnd(0,100))
+
+[hiddenAction_暴君效果2]
+autoTrigger:if self.isAttacking() and memory.暴君 == 1
+setUnitMemory:bjxg=int(rnd(0,100))
+
+[hiddenAction_暴君秒杀]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.globalTeamTags(includes="暴君") and lastDamagedBy.readUnitMemory('bjxg',type='number') >= 35 and lastDamagedBy.readUnitMemory('bjxg',type='number') <= 39 and not self.globalTeamTags(includes="无指挥官") and not self.hasFlag(id=16) and not self.hasFlag(id=10) and self.resource(type="bm") <= 0
+addResources:hp:-999999
+
+[hiddenAction_暴君秒杀2]
+autoTriggerOnEvent:killedAnyUnit
+requireConditional:if self.globalTeamTags(includes="暴君")
+setUnitMemory:bjxg=int(rnd(0,100))
+
+#---防御者效果---
+
+[hiddenAction_防御者随机]
+autoTriggerOnEvent:killedAnyUnit
+requireConditional:if self.globalTeamTags(includes="防御者")
+autoTrigger:if attacking.hasTakenDamage(withinSeconds=0.2) and memory.防御者 == 1 and memory.fyzxg2 <= 0 and self.resource.fyzdjs <= 0
+setUnitMemory:fyzxg2=int(rnd(10,30)),fyzxg=int(rnd(0,100))
+setResourcesWithLogic:fyzdjs=180
+
+[hiddenAction_防御者倒计时]
+autoTrigger:if self.resource.fyzdjs > 0
+addResources:fyzdjs:-0.5
+
+[hiddenAction_防御者效果结束]
+autoTrigger:if self.resource.fyzdjs <= 0 and memory.fyzxg2 != 0
+setUnitMemory:fyzxg2=0
+
+[action_show防御者效果]
+#infoOnly:true
+text:装甲过载\n剩余%{int(self.resource(type="fyzdjs"))}s
+description:装甲过载\n倒计时前装甲额外增加%{memory.fyzxg2}
+buildSpeed:0s
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/护盾2.png
+pos:21
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type="fyzdjs") > 0
+
+
+
+#---鹰眼效果---
+
+[hiddenAction_鹰眼效果]
+requireConditional:if self.globalTeamTags(includes="鹰眼")
+autoTriggerOnEvent:killedAnyUnit
+autoTrigger:if attacking.hasTakenDamage(withinSeconds=0.5) and memory.鹰眼 == 1
+setUnitMemory:yyxg=int(rnd(0,100))
+
+[hiddenAction_鹰眼秒杀]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.globalTeamTags(includes="鹰眼") and lastDamagedBy.readUnitMemory('yyxg',type='number') >= 35 and lastDamagedBy.readUnitMemory('yyxg',type='number') <= 44 and not self.globalTeamTags(includes="无指挥官")
+setUnitMemory:yyxg2=1
+setResourcesWithLogic:yydjs=10
+
+[hiddenAction_鹰眼倒计时]
+autoTrigger:if self.resource.yydjs > 0
+addResources:yydjs:-0.5
+
+[hiddenAction_鹰眼效果结束]
+autoTrigger:if self.resource.yydjs <= 0 and memory.yyxg2 != 0
+setUnitMemory:yyxg2=0
+
+
+[action_show鹰眼效果]
+#infoOnly:true
+text:射程衰减\n剩余%{int(self.resource(type="yydjs"))}s
+description:射程衰减...\n攻击距离减少70%\n由于敌方鹰眼指挥官所造成的效果
+buildSpeed:0s
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/射程衰减.png
+pos:21
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type="yydjs") > 0
+
+
+
+[action_手动销毁]
+isVisible:if self.globalTeamTags(includes='销毁')
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/delete.png
+text:自我销毁
+isActive:true
+#isGuiBlinking:true
+buildSpeed:${2*core.radius*0.04}s
+ai_isHighPriority:false
+addResources:${core.price},hp:-999999
+pos:9999
+description:销毁\n返还建造时所需资源\n再按一次确定
+displayType:rally
+whenBuilding_cannotMove:true
+
+[hiddenAction_命中就是我的]
+autoTriggerOnEvent:tookDamage
+switchToTeam:lastDamagedBy.teamId
+requireConditional:if self.globalTeamTags(includes='命中就是我的')
+
+[decal_选择]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/square.png
+layer:shadow
+onlyTeam:own
+onlyWhenSelectedByOwnPlayer:true
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_6s:((self.timeAlive()%2)/2)
+alpha:0.6+cos(${timer_6s}*360)*0.2
+onlyWhileAlive:true
+imageScale:${(core.radius)*0.016}
+
+[decal_选择_1]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/circle_1.png
+layer:onTop
+@copyFromSection:decal_选择
+@define timer_6s:((self.timeAlive()%2)/2)
+alpha:0.5+cos(${timer_6s}*360)*0.3
+imageScale:${(core.radius)*0.016}+cos(${timer_6s}*360)*0.015
+
+[decal_选择_1_1]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/circle_1_1.png
+layer:onTop
+@copyFromSection:decal_选择
+@define timer_9s:((self.timeAlive()%3)/3)
+alpha:0.5+cos(${timer_9s}*360)*0.3
+imageScale:${(core.radius)*0.016}+cos(${timer_9s}*360)*0.015
+
+
+[decal_选择2]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/square2.png
+imageScaleX:1
+layer:shadow
+imageScaleY:1
+onlyTeam:ally
+onlyWhenSelectedByAllyNotOwnPlayer:true
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_6s:((self.timeAlive()%2)/2)
+alpha:0.6+cos(${timer_6s}*360)*0.2
+onlyWhileAlive:true
+imageScale:${(core.radius)*0.016}
+isVisible:true
+
+[decal_选择2_1]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/circle2_1.png
+@copyFromSection:decal_选择2
+layer:onTop
+@define timer_6s:((self.timeAlive()%3)/3)
+alpha:0.6+cos(${timer_6s}*360)*0.2
+imageScale:${(core.radius)*0.016}+cos(${timer_6s}*360)*0.015
+
+[decal_选择2_1_1]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/circle2_1_1.png
+@copyFromSection:decal_选择2
+layer:onTop
+@define timer_9s:((self.timeAlive()%2)/2)
+alpha:0.6+cos(${timer_9s}*360)*0.3
+imageScale:${(core.radius)*0.016}+cos(${timer_9s}*360)*0.015
+
+[decal_选择3]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/square1.png
+imageScaleX:1
+imageScaleY:1
+layer:shadow
+onlyTeam:enemy
+onlyOnNonPreview:true
+onlyWhenSelectedByEnemyPlayer:true
+alwaysStartDirAtZero:true
+@define timer_6s:((self.timeAlive()%2)/2)
+alpha:0.6+cos(${timer_6s}*360)*0.2
+onlyWhileAlive:true
+imageScale:${(core.radius)*0.016}
+isVisible:true
+
+[decal_选择3_1]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/circle1_1.png
+@copyFromSection:decal_选择3
+layer:onTop
+@define timer_6s:((self.timeAlive()%2)/2)
+alpha:0.6+cos(${timer_6s}*360)*0.2
+imageScale:${(core.radius)*0.016}+cos(${timer_6s}*360)*0.015
+
+[decal_选择3_1_1]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/circle1_1_1.png
+@copyFromSection:decal_选择3
+layer:onTop
+@define timer_9s:((self.timeAlive()%3)/3)
+alpha:0.6+cos(${timer_9s}*360)*0.3
+imageScale:${(core.radius)*0.016}+cos(${timer_9s}*360)*0.015
+
+
+[decal_血条_内_1]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/血条_内.png
+imageScaleX:(self.hp/memory.生命)*${core.radius}
+imageScaleY:0.5
+isVisible:if self.hp() > memory.生命*0.7
+@copyFromSection:decal_血条_左
+yOffsetAbsolute:${(core.radius+5)*1}
+xOffsetAbsolute:${(core.radius)*-1}
+
+[decal_血条_内_2]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/血条_内_黄.png
+imageScaleX:(self.hp/memory.生命)*${core.radius}
+imageScaleY:0.5
+isVisible:if self.hp() > ${core.maxHp*0.4} and self.hp() <= memory.生命*0.7
+@copyFromSection:decal_血条_左
+yOffsetAbsolute:${(core.radius+5)*1}
+xOffsetAbsolute:${(core.radius)*-1}
+
+[decal_血条_内_3]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/血条_内_红.png
+imageScaleX:(self.hp/memory.生命)*${core.radius}
+imageScaleY:0.5
+isVisible:if self.hp() >= memory.生命*0 and self.hp() <= ${core.maxHp*0.4}
+@copyFromSection:decal_血条_左
+yOffsetAbsolute:${(core.radius+5)*1}
+xOffsetAbsolute:${(core.radius)*-1}
+
+[decal_血条_左]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/血条_侧.png
+imageScaleX:0.8
+layer:onTop
+imageScaleY:0.9
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+onlyWhileAlive:true
+imageScale:1
+#isVisible:if not self.hp(greaterThan=${core.maxHp*0.4})
+yOffsetAbsolute:${(core.radius+5)*1}
+xOffsetAbsolute:${(core.radius)*-1}
+
+[decal_血条_右]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/血条_侧_右.png
+@copyFromSection:decal_血条_左
+yOffsetAbsolute:${(core.radius+5)*1}
+xOffsetAbsolute:${(core.radius)*1}
+
+[decal_血条_上]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/血条.png
+imageScaleX:${(core.radius)}
+imageScaleY:0.4
+@copyFromSection:decal_血条_左
+yOffsetAbsolute:${(core.radius+5)*1}
+xOffsetAbsolute:${(core.radius)*-1}
+
+
+
+[decal_护盾_内_1]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/护盾_内.png
+imageScaleX:(self.shield/self.maxShield)*${core.radius}
+imageScaleY:0.55
+isVisible:if self.shield() > self.maxShield*0 and self.maxShield() > 0
+# and self.maxEnergy() > 0
+@copyFromSection:decal_护盾_左
+yOffsetAbsolute:${(core.radius+10)*1}
+xOffsetAbsolute:${(core.radius)*-1}
+
+[decal_护盾_左]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/护盾_侧.png
+imageScaleX:0.8
+layer:onTop
+imageScaleY:0.85
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+onlyWhileAlive:true
+imageScale:1
+isVisible:if self.maxShield() > 0
+# and self.maxEnergy() == 0
+yOffsetAbsolute:${(core.radius+10)*1}
+xOffsetAbsolute:${(core.radius)*-1}
+
+[decal_护盾_右]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/护盾_侧_右.png
+@copyFromSection:decal_护盾_左
+yOffsetAbsolute:${(core.radius+10)*1}
+xOffsetAbsolute:${(core.radius)*1}
+
+[decal_护盾_上]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/护盾.png
+imageScaleX:${(core.radius)}
+imageScaleY:0.35
+@copyFromSection:decal_护盾_左
+yOffsetAbsolute:${(core.radius+10)*1}
+xOffsetAbsolute:${(core.radius)*-1}
+
+
+[decal_能量_内_1]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/能量_内.png
+imageScaleX:(self.energy/self.maxEnergy)*${core.radius}
+imageScaleY:0.55
+isVisible:if self.energy() > self.maxEnergy*0 and self.maxEnergy() > 0 and self.maxShield() >0
+@copyFromSection:decal_能量_左
+yOffsetAbsolute:${(core.radius+14)*1}
+xOffsetAbsolute:${(core.radius)*-1}
+
+[decal_能量_左]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/能量_侧.png
+imageScaleX:0.8
+layer:onTop
+imageScaleY:0.85
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+onlyWhileAlive:true
+imageScale:1
+isVisible:if self.maxEnergy() > 0 and self.maxEnergy() > 0 and self.maxShield() >0
+yOffsetAbsolute:${(core.radius+14)*1}
+xOffsetAbsolute:${(core.radius)*-1}
+
+[decal_能量_右]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/能量_侧_右.png
+@copyFromSection:decal_能量_左
+yOffsetAbsolute:${(core.radius+14)*1}
+xOffsetAbsolute:${(core.radius)*1}
+
+[decal_能量_上]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/能量.png
+imageScaleX:${(core.radius)}
+imageScaleY:0.35
+@copyFromSection:decal_能量_左
+yOffsetAbsolute:${(core.radius+14)*1}
+xOffsetAbsolute:${(core.radius)*-1}
+
+
+
+[decal_能量2_内_1]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/能量_内.png
+imageScaleX:(self.energy/self.maxEnergy)*${core.radius}
+imageScaleY:0.55
+isVisible:if self.energy() > self.maxEnergy*0 and self.maxShield() == 0
+@copyFromSection:decal_能量2_左
+yOffsetAbsolute:${(core.radius+10)*1}
+xOffsetAbsolute:${(core.radius)*-1}
+
+[decal_能量2_左]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/能量_侧.png
+imageScaleX:0.8
+layer:onTop
+imageScaleY:0.85
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+onlyWhileAlive:true
+imageScale:1
+isVisible:if self.maxEnergy() > 0 and self.maxShield() == 0
+yOffsetAbsolute:${(core.radius+10)*1}
+xOffsetAbsolute:${(core.radius)*-1}
+
+[decal_能量2_右]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/能量_侧_右.png
+@copyFromSection:decal_能量2_左
+yOffsetAbsolute:${(core.radius+10)*1}
+xOffsetAbsolute:${(core.radius)*1}
+
+[decal_能量2_上]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/能量.png
+imageScaleX:${(core.radius)}
+imageScaleY:0.35
+@copyFromSection:decal_能量2_左
+yOffsetAbsolute:${(core.radius+10)*1}
+xOffsetAbsolute:${(core.radius)*-1}
+
+
+
+[decal_盾破]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/护盾破损.png
+imageScaleX:1
+imageScaleY:1
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_4s:((self.timeAlive()%2)/2)
+alpha:0.6+cos(${timer_4s}*360)*0.2
+onlyWhileAlive:true
+imageScale:${(core.radius)*0.03}
+isVisible:if self.shield() <= 10 and self.maxShield() >= 1 and self.hasTakenDamage(withinSeconds=3) and ${core.radius} <= 30
+#yOffsetRelative:${(core.radius+5)*0.35}
+
+[decal_盾破2]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/护盾破损.png
+imageScaleX:1
+imageScaleY:1
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_4s:((self.timeAlive()%2)/2)
+alpha:0.6+cos(${timer_4s}*360)*0.2
+onlyWhileAlive:true
+imageScale:${(core.radius)*0.02}
+isVisible:if self.shield() <= 10 and self.maxShield() >=1 and self.hasTakenDamage(withinSeconds=3) and ${core.radius} > 30
+#yOffsetRelative:${(core.radius+5)*0.35}
+
+[resource_jsjs]
+hidden:true
+
+[hiddenAction_击杀计时2]
+autoTrigger:if self.resource.jsjs > 0
+addResources:jsjs=-0.5
+
+[decal_击杀]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/击杀提示.png
+imageScaleX:1
+imageScaleY:1
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_4s:((self.timeAlive()%2)/2)
+alpha:0.6+cos(${timer_4s}*360)*0.4
+onlyWhileAlive:true
+imageScale:${(core.radius)*0.02}
+isVisible:if self.resource.jsjs > 0 and ${core.radius} <= 30
+#yOffsetRelative:${(core.radius+5)*0.75}
+xOffsetRelative:${(core.radius+5)*-0.6}
+
+[decal_击杀2]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/击杀提示.png
+imageScaleX:1
+imageScaleY:1
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_4s:((self.timeAlive()%2)/2)
+alpha:0.6+cos(${timer_4s}*360)*0.4
+onlyWhileAlive:true
+imageScale:${(core.radius)*0.012}
+isVisible:if self.resource.jsjs > 0 and ${core.radius} > 30
+#yOffsetRelative:${(core.radius)*0.75}
+xOffsetRelative:${(core.radius+5)*-0.6}
+
+[decal_攻击]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/攻击提示.png
+imageScaleX:1
+imageScaleY:1
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_7s:((self.timeAlive()%2)/2)
+alpha:0.6+cos(${timer_7s}*360)*0.4
+onlyWhileAlive:true
+imageScale:${(core.radius)*0.012}
+isVisible:if attacking.hasTakenDamage(withinSeconds=3) and ${core.radius} <= 30
+#yOffsetRelative:${(core.radius+5)*0.75}
+xOffsetRelative:${(core.radius+5)*0.6}
+
+[decal_攻击2]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/攻击提示.png
+imageScaleX:1
+imageScaleY:1
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_7s:((self.timeAlive()%2)/2)
+alpha:0.6+cos(${timer_7s}*360)*0.4
+onlyWhileAlive:true
+imageScale:${(core.radius)*0.009}
+isVisible:if attacking.hasTakenDamage(withinSeconds=3) and ${core.radius} > 30
+#yOffsetRelative:${(core.radius)*0.75}
+xOffsetRelative:${(core.radius+5)*0.6}
+
+[hiddenAction_穿透触发]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.numberOfAttachedUnits(withTag='穿透模块',greaterThan=0) and not lastDamagedBy.numberOfAttachedUnits(withTag='穿透模块T2',greaterThan=0) and self.resource(type="bm") <= 0
+addResourcesWithLogic:hp=(${core.armour}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2)*-1
+
+[hiddenAction_穿透触发2]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.numberOfAttachedUnits(withTag='穿透模块T2',greaterThan=0) and self.resource(type="bm") <= 0
+addResourcesWithLogic:hp=(${core.armour}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2)*-2
+
+[hiddenAction_破甲]
+autoTriggerOnEvent:tookDamage(withTag='破甲')
+requireConditional:if self.resource(type="bm") <= 0
+addResourcesWithLogic:hp=(${core.armour}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2)*-2
+
+[hiddenAction_高热]
+autoTriggerOnEvent:tookDamage(withTag='高热弹')
+requireConditional:if self.resource(type="bm") <= 0
+addResourcesWithLogic:rsd=${core.radius}*0.05
+
+[hiddenAction_穿透]
+autoTriggerOnEvent:tookDamage(withTag='穿透弹')
+requireConditional:if self.resource(type="bm") <= 0
+addResourcesWithLogic:msd:(${core.armour}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2)*0.05
+
+[hiddenAction_腐蚀弹]
+autoTriggerOnEvent:tookDamage(withTag='腐蚀弹')
+requireConditional:if self.resource(type="bm") <= 0
+addResourcesWithLogic:hp:memory.生命*-0.01
+
+[decal_损坏]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/损坏齿轮.png
+imageScaleX:1
+imageScaleY:1
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_3s:((self.timeAlive()%3)/3)
+alpha:0.6+cos(${timer_3s}*360)*0.4
+onlyWhileAlive:true
+imageScale:${(core.radius)*0.006}+cos(${timer_3s}*360)*0.015
+isVisible:if not self.hp(greaterThan=${core.maxHp*0.4}) and ${core.radius} > 30
+yOffsetRelative:${(core.radius+5)*-0.7}
+xOffsetRelative:${(core.radius+5)*0.7}
+
+[decal_损坏黑]
+image:${graphics.image_wreak}
+imageScaleX:1
+imageScaleY:1
+onlyOnNonPreview:true
+alwaysStartDirAtZero:false
+alpha:0.7
+onlyWhileAlive:true
+imageScale:1
+isVisible:if not self.hp(greaterThan=${core.maxHp*0.4})
+
+[decal_损坏2]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/损坏齿轮.png
+imageScaleX:1
+imageScaleY:1
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_3s:((self.timeAlive()%3)/3)
+alpha:0.6+cos(${timer_3s}*360)*0.4
+onlyWhileAlive:true
+imageScale:${(core.radius)*0.01}+cos(${timer_3s}*360)*0.015
+isVisible:if not self.hp(greaterThan=${core.maxHp*0.4}) and ${core.radius} <= 30
+yOffsetRelative:${(core.radius+5)*-0.7}
+xOffsetRelative:${(core.radius+5)*0.7}
+
+
+[decal_重载]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/重新装载.png
+imageScaleX:1
+imageScaleY:1
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_4s:((self.timeAlive()%3)/3)
+alpha:0.6+cos(${timer_4s}*360)*0.2
+onlyWhileAlive:true
+imageScale:${(core.radius)*0.009}+cos(${timer_4s}*360)*0.015
+isVisible:if self.energy(empty=true) and ${attack.canAttack} == true and ${core.radius} <= 30
+yOffsetRelative:${(core.radius+5)*0.75}
+xOffsetRelative:${(core.radius+5)*-0.7}
+
+[decal_重载2]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/重新装载.png
+imageScaleX:1
+imageScaleY:1
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_4s:((self.timeAlive()%3)/3)
+alpha:0.6+cos(${timer_4s}*360)*0.2
+onlyWhileAlive:true
+imageScale:${(core.radius)*0.006}+cos(${timer_4s}*360)*0.015
+isVisible:if self.energy(empty=true) and ${attack.canAttack} == true and ${core.radius} > 30
+yOffsetRelative:${(core.radius+5)*0.75}
+xOffsetRelative:${(core.radius+5)*-0.6}
+
+
+[decal_等级提]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/等级提示.png
+imageScaleX:1
+imageScaleY:1
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_5s:((self.timeAlive()%2)/2)
+alpha:0.45+cos(${timer_5s}*360)*0.2
+onlyWhileAlive:true
+imageScale:${core.radius*0.0011}
+isVisible:if self.resource.djds1 >= (memory.syds1*self.resource.dj+20)*1.5 and self.resource.dj < 25 and ${core.radius} <= 15
+yOffsetRelative:${(core.radius+5)*0.6}
+xOffsetRelative:${(core.radius+5)*0.6}
+
+[decal_等级提]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/等级提示.png
+imageScaleX:1
+imageScaleY:1
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_5s:((self.timeAlive()%2)/2)
+alpha:0.45+cos(${timer_5s}*360)*0.2
+onlyWhileAlive:true
+imageScale:${core.radius*0.008}
+isVisible:if self.resource.djds1 >= (memory.syds1*self.resource.dj+20)*1.5 and self.resource.dj < 25 and ${core.radius} < 30
+yOffsetRelative:${(core.radius+5)*0.6}
+xOffsetRelative:${(core.radius+5)*0.6}
+
+[decal_等级提2]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/等级提示.png
+imageScaleX:1
+imageScaleY:1
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_5s:((self.timeAlive()%2)/2)
+alpha:0.45+cos(${timer_5s}*360)*0.2
+onlyWhileAlive:true
+imageScale:${core.radius*0.006}
+isVisible:if self.resource.djds1 >= (memory.syds1*self.resource.dj+20)*1.5 and self.resource.dj < 25 and ${core.radius} > 30
+yOffsetRelative:${(core.radius+5)*0.6}
+xOffsetRelative:${(core.radius+5)*0.6}
+
+[hiddenAction_单位初始设置]
+autoTriggerOnEvent:created
+setResourcesWithLogic:hp:99999,hfjs:0.5
+
+[decal_停火]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/禁止开火.png
+imageScaleX:1
+imageScaleY:1
+onlyOnNonPreview:true
+alwaysStartDirAtZero:true
+@define timer_4s:((self.timeAlive()%2)/2)
+alpha:0.6+cos(${timer_4s}*360)*0.2
+onlyWhileAlive:true
+imageScale:0.25
+isVisible:if memory.停火 == 0
+yOffsetRelative:${(core.radius+5)*0.35}
+
+[action_停火]
+isVisible:false
+isVisible:if memory.停火 != 0 and self.globalTeamTags(includes='停火辅助') and self.tags(includes='炮塔')
+#iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/重新装载.png
+alwaysSinglePress:false
+setUnitMemory:停火=0
+clearActiveWaypoint:true
+description:对近战单位无效
+text:禁止开火
+isActive:true
+isGuiBlinking:false
+buildSpeed:0
+pos:-1.1
+displayType:action
+
+[action_不停火]
+autoTriggerOnEvent:created
+isVisible:false
+isVisible:if memory.停火 != 1 and self.globalTeamTags(includes='停火辅助') and self.tags(includes='炮塔')
+#iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/重新装载.png
+setUnitMemory:停火=1
+text:允许开火
+isActive:true
+clearActiveWaypoint:true
+alwaysSinglePress:true
+isGuiBlinking:true
+buildSpeed:0
+pos:-1.1
+displayType:action
+
+[hiddenAction_关闭刮痧]
+autoTriggerOnEvent:created
+setUnitMemory:guasha=1
+
+[hiddenAction_刮痧模式开启]
+autoTrigger:if self.globalTeamTags(includes="刮痧") and memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha != 0
+setUnitMemory:guasha=0
+
+[action_T2]
+addResources:hfjs:2
+convertTo_keepCurrentFields:maxHp,nanoFactorySpeed,moveSpeed,maxAttackRange,maxShield,armour,shootDelayMultiplier,shootDamageMultiplier,maxTurnSpeed
+
+[graphics]
+showHealthBar:false
+showEnergyBar:false
+showShieldBar:false
+showSelectionIndicator:false
+teamColorsOnTurret:true
+image_shield:ROOT:[WarField][战争之地]/-shared-/-贴图-/shield_mid.png
+image_wreak:ROOT:[WarField][战争之地]/-shared-/-贴图-/null.png
+
+#---灭火---
+
+[hiddenAction_灭火计时]
+autoTrigger:if self.hasFlag(id=2) and self.resource.mhdjs == 0 and self.globalTeamTags(includes='灭火辅助') and self.queueSize() < 1
+setResourcesWithLogic:mhdjs=7
+
+[hiddenAction_灭火计时222]
+autoTrigger:if self.resource(type="mhdjs") > 2
+addResources:mhdjs:-0.5
+
+[hiddenAction_灭火触发]
+autoTrigger:if self.hasFlag(id=2) and self.resource.mhdjs == 2 and self.globalTeamTags(includes='灭火辅助') and self.queueSize() < 1
+alsoQueueAction:燃烧修复
+setResourcesWithLogic:mhdjs=0
+
+#银行操作
+
+[hiddenAction_银行1]
+autoTrigger:if self.globalTeamTags(includes="欠钱不还")
+addResources:hp:-12.5,energy:-0.25,shield:-5
+setResourcesWithLogic:lx:10,fs:10
+
+
+#---究极护甲---
+
+[hiddenAction_究极护甲]
+autoTrigger:if self.globalTeamTags(includes='究极护甲') and memory.jjhj != 1
+setUnitMemory:jjhj=1
+setResourcesWithLogic:hp:99999,hfjs:1
+
+[hiddenAction_究极护甲恢复]
+autoTrigger:if self.globalTeamTags(includes='究极护甲') and not self.hp(full=true)
+addResources:hp:2.5
+
+[hiddenAction_究极护甲恢复2]
+autoTrigger:if self.globalTeamTags(includes='究极护甲') and not self.shield(full=true)
+addResources:shield:2.5
+
+#---无限火力---
+
+[hiddenAction_无限火力]
+autoTrigger:if self.globalTeamTags(includes='无限火力') and not self.energy(full=true)
+setResourcesWithLogic:energy:${core.energyMax}
+
+[hiddenAction_无限火力2]
+autoTrigger:if self.globalTeamTags(includes='无限火力') and self.isAttacking()
+setResourcesWithLogic:energy:${core.energyMax}
+
+#--科技单位加强--
+
+[hiddenAction_普通加强]
+autoTrigger:if self.globalTeamTags(includes='普通建筑') and not self.tags(includes='炮塔') and self.resource.dwjq != 1 and not self.globalTeamTags(includes='普通建筑2') and self.resource.dwjq != 2
+setResourcesWithLogic:dwjq=1,hp:99999,hfjs:1
+
+[hiddenAction_普通建筑生命]
+autoTrigger:if self.globalTeamTags(includes='普通建筑') and not self.tags(includes='炮塔') and not self.hp(full=true) and not self.globalTeamTags(includes='普通建筑2')
+addResources:hp:1
+
+[hiddenAction_普通建筑护盾]
+autoTrigger:if self.globalTeamTags(includes='普通建筑') and not self.tags(includes='炮塔') and not self.shield(full=true) and not self.globalTeamTags(includes='普通建筑2')
+addResources:shield:1
+
+#--科技2级加强--
+
+[hiddenAction_普通加强l]
+autoTrigger:if self.globalTeamTags(includes='普通建筑2') and not self.tags(includes='炮塔') and self.resource.dwjq != 2
+setResourcesWithLogic:dwjq=2,hp:99999,hfjs:1
+
+[hiddenAction_普通建筑加强2l]
+autoTriggerOnEvent:created
+requireConditional:if self.globalTeamTags(includes='普通建筑2') and not self.tags(includes='炮塔')
+setResourcesWithLogic:dj=2,hp:99999,hfjs:1
+
+[hiddenAction_普通建筑加强生命l]
+autoTrigger:if self.globalTeamTags(includes='普通建筑2') and not self.tags(includes='炮塔') and not self.hp(full=true)
+addResources:hp:2
+
+[hiddenAction_普通建筑加强护l]
+autoTrigger:if self.globalTeamTags(includes='普通建筑2') and not self.tags(includes='炮塔') and not self.shield(full=true)
+addResources:shield:2
+
+
+#--科技单位加强L--
+
+[hiddenAction_炮塔加强]
+autoTrigger:if self.globalTeamTags(includes='炮塔升级') and self.tags(includes='炮塔') and self.resource.ptjq != 1 and not self.globalTeamTags(includes='炮塔升级2') and self.resource.ptjq != 2
+setResourcesWithLogic:ptjq=1,hp:99999,hfjs:1
+
+[hiddenAction_炮塔升级生命]
+autoTrigger:if self.globalTeamTags(includes='炮塔升级') and self.tags(includes='炮塔') and not self.hp(full=true) and not self.globalTeamTags(includes='炮塔升级2')
+addResources:hp:1
+
+[hiddenAction_炮塔升级护盾]
+autoTrigger:if self.globalTeamTags(includes='炮塔升级') and self.tags(includes='炮塔') and not self.shield(full=true) and not self.globalTeamTags(includes='炮塔升级2')
+addResources:shield:1
+
+#---炮塔加强---
+
+[hiddenAction_炮塔加强2]
+autoTrigger:if self.globalTeamTags(includes='炮塔升级2') and self.tags(includes='炮塔') and self.resource.ptjq != 2
+setResourcesWithLogic:ptjq=2,hp:99999,hfjs:1
+
+[hiddenAction_炮塔升级加强2l]
+autoTriggerOnEvent:created
+requireConditional:if self.globalTeamTags(includes='炮塔升级2') and self.tags(includes='炮塔')
+setResourcesWithLogic:dj=2,hp:99999,hfjs:1
+
+[hiddenAction_炮塔升级生命2]
+autoTrigger:if self.globalTeamTags(includes='炮塔升级2') and self.tags(includes='炮塔') and not self.hp(full=true)
+addResources:hp:2
+
+[hiddenAction_炮塔升级护盾2]
+autoTrigger:if self.globalTeamTags(includes='炮塔升级2') and self.tags(includes='炮塔') and not self.shield(full=true)
+addResources:shield:2
+
+
+#人机特殊操作
+
+[hiddenAction_人机护盾加成]
+autoTrigger:if self.isControlledByAI() and self.globalTeamTags(includes='死亡模式') and self.hasUnitInTeam(withTag="研究中心",greaterThan=0) and self.shield(full=true)
+addResources:shield=1
+
+[hiddenAction_人机生命加成]
+autoTrigger:if self.isControlledByAI() and self.globalTeamTags(includes='困难模式') and not self.hasUnitInTeam(withTag="研究中心",greaterThan=0) and not self.hp(full=true)
+addResources:hp=0.05
+
+[hiddenAction_人机生命加成2]
+autoTrigger:if self.isControlledByAI() and self.globalTeamTags(includes='困难模式') and self.hasUnitInTeam(withTag="研究中心",greaterThan=0) and not self.hp(full=true)
+addResources:hp=0.05
+
+[hiddenAction_人机生命加成l]
+autoTrigger:if self.isControlledByAI() and self.globalTeamTags(includes='死亡模式') and not self.hasUnitInTeam(withTag="研究中心",greaterThan=0) and not self.hp(full=true)
+addResources:hp=0.1
+
+[hiddenAction_人机生命加成l2]
+autoTrigger:if self.isControlledByAI() and self.globalTeamTags(includes='死亡模式') and self.hasUnitInTeam(withTag="研究中心",greaterThan=0) and not self.hp(full=true)
+addResources:hp=0.15
+
+[hiddenAction_人机弹药加成]
+autoTrigger:if self.isControlledByAI() and self.globalTeamTags(includes='死亡模式') and not self.queueSize(greaterThan=0) and not self.energy(full=true) and not self.hasUnitInTeam(withTag="研究中心",greaterThan=0)
+addResources:energy=0.25
+
+[hiddenAction_人机弹药加成2]
+autoTrigger:if self.isControlledByAI() and self.globalTeamTags(includes='死亡模式') and not self.queueSize(greaterThan=0) and self.hasUnitInTeam(withTag="研究中心",greaterThan=0) and not self.energy(full=true)
+addResources:energy=0.5
+
+#---全局资源---
+
+#--银行特定--
+
+[global_resource_sdjsq]
+hidden:true
+displayRoundedDown:true
+displayName:计算器
+
+[global_resource_zjj]
+hidden:true
+displayRoundedDown:true
+displayName:credits
+
+[global_resource_lix]
+hidden:true
+displayRoundedDown:true
+displayName:利息
+
+[global_resource_dk]
+hidden:true
+displayRoundedDown:true
+displayName:贷款
+
+[global_resource_hdk]
+hidden:true
+displayRoundedDown:true
+displayName:还贷款
+
+[global_resource_hdq]
+hidden:true
+displayRoundedDown:true
+displayName:还贷款
+
+#5分钟业务
+
+[global_resource_wfz]
+hidden:true
+displayRoundedDown:true
+displayName:5分钟剩余
+
+[global_resource_wfzsy]
+hidden:true
+displayRoundedDown:true
+displayName:5分钟收益
+
+[global_resource_gpsl]
+hidden:true
+displayRoundedDown:true
+displayName:股票数量
+
+#--所有单位--
+
+[resource_yydjs]
+displayName:鹰眼效果倒计时
+hidden:true
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_fyzdjs]
+displayName:防御者效果倒计时
+hidden:true
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_crdt]
+displayName:炽热倒计时
+hidden:true
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_crdtsy]
+displayName:炽热弹头
+hidden:true
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_ljnl]
+displayName:累计能量
+hidden:true
+displayWhenZero:true
+displayRoundedDown:true
+
+[global_resource_djds1]
+hidden:true
+displayName:等级点数
+displayRoundedDown:true
+
+[global_resource_zxf]
+hidden:true
+displayName:自修复工具
+displayRoundedDown:true
+
+[global_resource_pt]
+hidden:true
+displayName:普通子弹
+displayRoundedDown:true
+displayColor:#E8FF46
+
+[global_resource_dx]
+hidden:true
+displayRoundedDown:true
+displayName:大型子弹
+displayColor:#74CBFF
+
+[global_resource_ts]
+hidden:true
+displayRoundedDown:true
+displayName:特殊子弹
+displayColor:#A88BFF
+
+[global_resource_gt]
+hidden:true
+displayRoundedDown:true
+displayName:钢铁
+displayColor:#B5B5B5
+
+[global_resource_sy]
+hidden:true
+displayRoundedDown:true
+displayName:石油
+displayColor:#AF7310
+displayWhenZero:true
+
+[global_resource_rk]
+hidden:true
+displayRoundedDown:true
+displayName:人口
+displayColor:#FF79822E
+displayWhenZero:true
+
+[global_resource_sjd]
+hidden:false
+displayRoundedDown:false
+displayName:升级点数
+displayColor:#E3FFFC00
+displayWhenZero:false
+
+
+#---个体资源---
+
+[resource_mhdjs]
+displayName:灭火倒计时
+hidden:true
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_fsz]
+displayName:辐射值
+hidden:true
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_ptjq]
+displayName:炮塔加强
+hidden:true
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_dwjq]
+displayName:单位加强
+hidden:true
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_lxdfdj]
+displayName:连续得
+hidden:true
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_lxdf]
+displayName:连续得分
+hidden:true
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_hfjs]
+displayName:恢复计时
+hidden:true
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_sm]
+displayName:生命
+hidden:false
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_sh]
+displayName:伤害
+hidden:false
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_djds]
+displayName:等级点数
+hidden:true
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_dj]
+displayName:等级
+hidden:true
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_fsz]
+displayName:辐射值
+hidden:false
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_msd]
+displayName:磨损度
+hidden:false
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_bmjs]
+displayName:不灭金身恢复时间
+hidden:false
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_bm]
+displayName:不灭金身剩余
+hidden:false
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_jrsy]
+displayName:惊人一刻剩余时间
+hidden:false
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_jr]
+displayName:惊人一刻恢复时间
+hidden:false
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_lx]
+displayName:流血恢复时间
+hidden:false
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_wslx]
+displayName:流血2恢复时间
+hidden:false
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_fs]
+displayName:腐蚀恢复时间
+hidden:false
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_zj]
+displayName:重甲恢复时间
+hidden:false
+displayWhenZero:true
+displayRoundedDown:true
+
+[resource_rsd]
+displayName:燃烧点
+
+[attack]
+maxAttackRange:0
+
+#---触发---
+
+#---人机---
+
+[hiddenAction_目标攻击]
+autoTrigger:if numberOfUnitsInEnemyTeam(withTag='护盾发生器',greaterThan=0,withinRange=600) and self.isControlledByAI()
+addWaypoint_target_nearestUnit_team:enemy
+addWaypoint_target_nearestUnit_tagged:护盾发生器
+clearActiveWaypoint:true
+addWaypoint_type:attack
+
+[hiddenAction_目标攻击2]
+autoTrigger:if numberOfUnitsInEnemyTeam(withTag='反核装置',greaterThan=0,withinRange=500) and not numberOfUnitsInEnemyTeam(withTag='护盾发生器',greaterThan=0,withinRange=600) and self.isControlledByAI()
+addWaypoint_target_nearestUnit_team:enemy
+addWaypoint_target_nearestUnit_tagged:反核装置
+clearActiveWaypoint:true
+addWaypoint_type:attack
+
+[action_手动换的]
+isVisible:if not self.energy(full=true) and self.energy() > 0 and not self.queueSize(greaterThan=0) and not self.globalTeamTags(includes='无限火力')
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/重新装载.png
+addResources:energy=-999
+text:手动换弹
+isActive:true
+isGuiBlinking:true
+buildSpeed:0
+ai_isHighPriority:true
+pos:-1.1
+displayType:action
+
+#---科技---
+
+[hiddenAction_升级点数增加]
+autoTriggerOnEvent:killedAnyUnit
+addResourcesWithLogic:sjd=0.025,credits=memory.生命*0.1,djds1:5
+
+[action_换弹]
+isVisible:if self.energy() > 0
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/重新装载.png
+
+#---修复---
+
+[hiddenAction_修复零阶]
+autoTrigger:if not self.globalTeamTags(includes="修复1") and not self.globalTeamTags(includes="修复2") and memory.xfjl != ${core.nanoRange}
+setUnitStats:nanoRange=memory.xfjl
+setUnitMemory:xfjl=${core.nanoRange}
+
+[hiddenAction_修复一阶]
+autoTrigger:if self.globalTeamTags(includes="修复1") and not self.globalTeamTags(includes="修复2") and memory.xfjl != ${core.nanoRange*1.3}
+setUnitStats:nanoRange=memory.xfjl
+setUnitMemory:xfjl=${core.nanoRange*1.3}
+
+[hiddenAction_修复二阶]
+autoTrigger:if self.globalTeamTags(includes="修复2") and memory.xfjl != ${core.nanoRange*1.6}
+setUnitStats:nanoRange=memory.xfjl
+setUnitMemory:xfjl=${core.nanoRange*1.6}
+
+#---1.5倍---
+
+[hiddenAction_-1倍]
+autoTrigger:if not self.globalTeamTags(includes="1.5建造") and memory.jzsd != 1*memory.sjjzsd and memory.疾风!= 1 and not self.globalTeamTags(includes="2建造") and not self.globalTeamTags(includes="3建造") and self.globalTeamTags(includes='阳寿')
+setUnitMemory:jzsd=1*memory.sjjzsd
+setUnitStats:nanoFactorySpeed=memory.jzsd
+
+[hiddenAction_建造速度赋值]
+autoTrigger:if self.globalTeamTags(includes="1.5建造")
+setUnitStats:nanoFactorySpeed=memory.jzsd
+
+[hiddenAction_1倍]
+autoTrigger:if not self.globalTeamTags(includes="1.5建造") and memory.jzsd != 1.5*memory.sjjzsd and memory.疾风 == 1 and not self.globalTeamTags(includes="2建造") and not self.globalTeamTags(includes="3建造")
+setUnitMemory:jzsd=1.5*memory.sjjzsd
+setUnitStats:nanoFactorySpeed=memory.jzsd
+
+[hiddenAction_1.5倍]
+autoTrigger:if self.globalTeamTags(includes="1.5建造") and memory.jzsd != 1.5+0.5*memory.疾风*memory.sjjzsd and not self.globalTeamTags(includes="2建造") and not self.globalTeamTags(includes="3建造")
+setUnitMemory:jzsd=1.5+0.5*memory.疾风*memory.sjjzsd
+
+[hiddenAction_2倍]
+autoTrigger:if self.globalTeamTags(includes="2建造") and memory.jzsd != 2+1*memory.疾风*memory.sjjzsd and not self.globalTeamTags(includes="3建造")
+setUnitMemory:jzsd=2+1*memory.疾风*memory.sjjzsd
+
+[hiddenAction_3倍]
+autoTrigger:if self.globalTeamTags(includes="3建造") and memory.jzsd != 3+1.5*memory.疾风*memory.sjjzsd
+setUnitMemory:jzsd=3+1.5*memory.疾风*memory.sjjzsd
+
+#---监视者武士流血---
+
+[hiddenAction_监视者流血一阶]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.tags(includes='监视者') and self.hasTakenDamage(withinSeconds=2)
+setResourcesWithLogic:wslx=8
+
+[hiddenAction_监视者开始]
+autoTrigger:if self.resource(type="wslx") > 0
+addResources:wslx=-0.5
+
+[hiddenAction_监视者开始]
+autoTrigger:if self.resource(type="wslx") > 0
+addResources:hp=-2.5
+
+[hiddenAction_流血额外伤害]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.resource(type="wslx") > 0
+addResources:hp:-40
+
+#---武士流血---
+
+[hiddenAction_武士流血一阶]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.tags(includes='武士机甲') and self.hasTakenDamage(withinSeconds=2)
+setResourcesWithLogic:wslx=7
+
+[hiddenAction_武士开始]
+autoTrigger:if self.resource(type="wslx") > 0
+addResources:wslx=-0.5
+
+
+#---回收利用---
+
+[hiddenAction_回收利用]
+autoTriggerOnEvent:destroyed
+requireConditional:if self.globalTeamTags(includes="回收利用") and not self.globalTeamTags(includes="回收利用2")
+addResourcesWithLogic:credits=${core.maxHp}*0.4
+
+[hiddenAction_回收利用]
+autoTriggerOnEvent:destroyed
+requireConditional:if self.globalTeamTags(includes="回收利用2")
+addResourcesWithLogic:credits=${core.maxHp}*0.8
+
+#---自爆---
+
+[hiddenAction_自爆一阶]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.globalTeamTags(includes="自爆") and not lastDamagedBy.globalTeamTags(includes="自爆2")
+setUnitMemory:zib1=true
+
+[hiddenAction_自爆er阶]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.globalTeamTags(includes="自爆2")
+setUnitMemory:zib2=true
+
+[hiddenAction_自爆开始]
+autoTriggerOnEvent:destroyed
+requireConditional:if memory.zib1 == true and not memory.zib2 == true
+spawnUnits:自爆中介(setToTeamOfLastAttacker=true)
+
+[hiddenAction_自爆开始2]
+autoTriggerOnEvent:destroyed
+requireConditional:if memory.zib2 == true
+spawnUnits:自爆中介2(setToTeamOfLastAttacker=true)
+
+#---磨损---
+
+[hiddenAction_磨损1阶段l]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.resource(type="msd") >= 10*${core.radius*0.05} and self.resource(type="msd") < 20*${core.radius*0.05} and not self.globalTeamTags(includes="无坚不摧") and memory.装甲 < 50
+addResourcesWithLogic:hp=(memory.装甲-50)
+
+[hiddenAction_磨损1阶段lll]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.resource(type="msd") >= 10*${core.radius*0.05} and self.resource(type="msd") < 20*${core.radius*0.05} and self.globalTeamTags(includes="无坚不摧") and memory.装甲 < 25
+addResourcesWithLogic:hp=(memory.装甲-25)
+
+[hiddenAction_磨损2阶段l]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.resource(type="msd") >= 20*${core.radius*0.05} and self.resource(type="msd") < 30*${core.radius*0.05} and not self.globalTeamTags(includes="无坚不摧") and memory.装甲 < 70
+addResourcesWithLogic:hp=(memory.装甲-70)
+
+[hiddenAction_磨损2阶段lll]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.resource(type="msd") >= 20*${core.radius*0.05} and self.resource(type="msd") < 30*${core.radius*0.05} and self.globalTeamTags(includes="无坚不摧") and memory.装甲 < 35
+addResourcesWithLogic:hp=(memory.装甲-35)
+
+[hiddenAction_磨损3阶段l]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.resource(type="msd") >= 30*${core.radius*0.05} and self.resource(type="msd") < 40*${core.radius*0.05} and not self.globalTeamTags(includes="无坚不摧") and memory.装甲 < 100
+addResourcesWithLogic:hp=(memory.装甲-100)
+
+[hiddenAction_磨损3阶段lll]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.resource(type="msd") >= 30*${core.radius*0.05} and self.resource(type="msd") < 40*${core.radius*0.05} and self.globalTeamTags(includes="无坚不摧") and memory.装甲 < 50
+addResourcesWithLogic:hp=(memory.装甲-50)
+
+[hiddenAction_磨损4阶段l]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.resource(type="msd") >= 40*${core.radius*0.05} and self.resource(type="msd") < 50*${core.radius*0.05} and not self.globalTeamTags(includes="无坚不摧") and memory.装甲 < 140
+addResourcesWithLogic:hp=(memory.装甲-140)
+
+[hiddenAction_磨损4阶段lll]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.resource(type="msd") >= 40 and self.resource(type="msd") < 50*${core.radius*0.05} and self.globalTeamTags(includes="无坚不摧") and memory.装甲 < 70
+addResourcesWithLogic:hp=(memory.装甲-70)
+
+[hiddenAction_磨损5阶段l]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.resource(type="msd") >= 50*${core.radius*0.05} and not self.globalTeamTags(includes="无坚不摧") and memory.装甲 < 200
+addResourcesWithLogic:hp=(memory.装甲-200)
+
+[hiddenAction_磨损5阶段llll]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.resource(type="msd") >= 50*${core.radius*0.05} and self.globalTeamTags(includes="无坚不摧") and memory.装甲 < 100
+addResourcesWithLogic:hp=(memory.装甲-100)
+
+#---攻击间隔
+
+[hiddenAction_攻击间隔赋值]
+autoTriggerOnEvent:created
+setUnitStats:shootDelayMultiplier=memory.间隔
+
+[hiddenAction_攻击间隔赋值初始]
+autoTriggerOnEvent:created
+setUnitMemory:间隔=1
+setUnitStats:shootDelayMultiplier=memory.间隔
+
+[hiddenAction_攻击间隔初始2]
+autoTrigger:if self.resource(type="msd") >= 10*${core.radius*0.05} and self.resource(type="msd") < 20*${core.radius*0.05} and memory.间隔 != 1
+setUnitMemory:间隔=1
+setUnitStats:shootDelayMultiplier=memory.间隔
+
+[hiddenAction_磨损间隔1阶段]
+autoTrigger:if self.resource(type="msd") >= 20*${core.radius*0.05} and self.resource(type="msd") < 30*${core.radius*0.05} and memory.间隔 != 1.1
+setUnitMemory:间隔=1.1
+setUnitStats:shootDelayMultiplier=memory.间隔
+
+[hiddenAction_磨损间隔2阶段]
+autoTrigger:if self.resource(type="msd") >= 30*${core.radius*0.05} and self.resource(type="msd") < 40*${core.radius*0.05}  and memory.间隔 != 1.2
+setUnitMemory:间隔=1.2
+setUnitStats:shootDelayMultiplier=memory.间隔
+
+[hiddenAction_磨损间隔3阶段]
+autoTrigger:if self.resource(type="msd") >= 40*${core.radius*0.05} and self.resource(type="msd") < 50*${core.radius*0.05}  and memory.间隔 != 1.35
+setUnitMemory:间隔=1.35
+setUnitStats:shootDelayMultiplier=memory.间隔
+
+[hiddenAction_磨损间隔4阶段]
+autoTrigger:if self.resource(type="msd") >= 50*${core.radius*0.05}  and memory.间隔 != 1.55
+setUnitMemory:间隔=1.55
+setUnitStats:shootDelayMultiplier=memory.间隔
+
+[hiddenAction_静止磨损]
+autoTrigger:if  self.resource(type='msd') < 55*${core.radius*0.05}
+addResources:msd=0.005
+
+[hiddenAction_攻击磨损]
+autoTrigger:if attacking.hasTakenDamage(withinSeconds=0.2) and self.resource(type='msd') < 55*${core.radius*0.05}
+addResources:msd=0.01
+
+#---击退---
+
+[hiddenAction_击退l]
+autoTrigger:if self.hasTakenDamage(withinSeconds=3) and lastDamagedBy.globalTeamTags(includes="击退") and not self.globalTeamTags(includes="无坚不摧")
+spawnUnits:击退中介(setToTeamOfLastAttacker=true)
+
+#---点石成金---
+
+[hiddenAction_点石成金击杀]
+autoTriggerOnEvent:killedAnyUnit
+requireConditional:if self.globalTeamTags(includes="点石成金")
+addResourcesWithLogic:credits=memory.生命*0.5,sjd=0.05,djds1:10,djds=10
+
+#---不灭金身---
+
+[hiddenAction_不灭金身初始]
+autoTrigger:if self.globalTeamTags(includes="不灭金身") and not self.hasFlag(id=17)
+setResourcesWithLogic:bmjs=100
+addResources:setFlag=17
+
+[hiddenAction_不灭金身开始]
+autoTrigger:if self.resource(type="bmjs") >=0
+addResources:bmjs=-0.5
+
+[hiddenAction_不灭金身设置]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.resource(type="bmjs") <= 0 and self.globalTeamTags(includes="不灭金身") and not self.hasFlag(id=18)
+setResourcesWithLogic:bm=20
+addResources:setFlag=18
+
+
+[hiddenAction_不灭金身属性]
+autoTrigger:if self.resource(type="bm") >=0
+addResources:bm=-0.5
+
+[hiddenAction_不灭金身取消]
+autoTrigger:if self.globalTeamTags(includes="不灭金身") and self.resource(type="bm") <=0 and self.hasFlag(id=18) and self.resource(type="bmjs") <=0
+setResourcesWithLogic:bmjs=100
+addResources:unsetFlag=17,unsetFlag=18
+setUnitMemory:装甲=${core.armour}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+
+
+[hiddenAction_不灭金身属性开始]
+autoTrigger:if self.hasFlag(id=18) and memory.装甲 != 999999
+setUnitMemory:装甲=999999
+
+
+[hiddenAction_不灭取消设置]
+autoTrigger:if not self.hasFlag(id=16) and not self.hasFlag(id=18) and not self.hasFlag(id=9) and not self.globalTeamTags(includes="装甲1") and self.globalTeamTags(includes="不灭金身") and memory.装甲 != ${core.armour}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+setUnitMemory:装甲=${core.armour}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+
+
+#---荆棘护甲---
+
+[hiddenAction_荆棘护甲]
+autoTrigger:if attacking.hasTakenDamage(withinSeconds=0.5) and attacking.globalTeamTags(includes="荆棘护甲") and not attacking.globalTeamTags(includes="荆棘护甲2")
+addResources:hp:-50
+
+[hiddenAction_荆棘护甲2]
+autoTrigger:if attacking.hasTakenDamage(withinSeconds=0.5) and attacking.globalTeamTags(includes="荆棘护甲2")
+addResources:hp:-100
+
+
+#---惊人一刻---
+
+[hiddenAction_惊人一刻初始]
+autoTrigger:if self.globalTeamTags(includes="惊人一刻") and not self.hasFlag(id=14)
+setResourcesWithLogic:jr=60
+addResources:setFlag=14
+
+[hiddenAction_惊人一刻开始]
+autoTrigger:if self.resource(type="jr") >=0
+addResources:jr=-0.5
+
+[hiddenAction_惊人一刻设置]
+autoTrigger:if self.resource(type="jr") <= 0 and self.globalTeamTags(includes="惊人一刻") and self.isAttacking() and not self.hasFlag(id=15)
+setResourcesWithLogic:jrsy=25
+addResources:setFlag=15
+
+[hiddenAction_惊人属性开始]
+autoTrigger:if self.resource(type="jrsy") >=0
+addResources:jrsy=-0.5
+
+[hiddenAction_惊人一刻取消]
+autoTrigger:if self.resource(type="jrsy") <= 0 and self.globalTeamTags(includes="惊人一刻") and self.resource(type="jr") <=0 and self.hasFlag(id=15)
+setResourcesWithLogic:jr=60
+addResources:unsetFlag=15,unsetFlag=14
+
+[hiddenAction_惊人恢复]
+autoTrigger:if self.hasFlag(id=15)
+addResources:hp:2.5,shield=5,msd:-5,rsd:-5
+
+#---起死回生---
+
+[hiddenAction_起死回生]
+autoTrigger:if self.globalTeamTags(includes="起死回生") and self.hp > 0 and self.hp < ${core.maxHp*0.1} and not self.hasFlag(id=19) and self.globalTeamTags(includes="镜像") and memory.jxxg == true
+addResources:hp:99999,shield:99999,energy:99999,setFlag=19
+
+[hiddenAction_起死回生2]
+autoTrigger:if self.globalTeamTags(includes="起死回生") and self.hp > 0 and self.hp < ${core.maxHp*0.1} and not self.hasFlag(id=19) and not self.globalTeamTags(includes="镜像")
+addResources:hp:99999,shield:99999,energy:99999,setFlag=19
+
+#---玩火自焚---
+
+[hiddenAction_玩火自焚]
+autoTrigger:if attacking.globalTeamTags(includes="玩火自焚") and attacking.hasFlag(id=2) and not self.globalTeamTags(includes="无坚不摧") and not self.hasFlag(id=2)
+addResources:setFlag=2,rsd=${core.radius*2+20}
+
+#---保护---
+
+[hiddenAction_护盾保护范围]
+autoTrigger:if self.hasUnitInTeam(withTag='护盾发生器',greaterThan=0,withinRange=200) and not self.hasFlag(id=16)
+addResources:setFlag=16
+
+[hiddenAction_护盾保护范围2]
+autoTrigger:if self.hasUnitInTeam(withTag='护盾发生器2',greaterThan=0,withinRange=260) and not self.hasFlag(id=16) 
+addResources:setFlag=16
+
+[hiddenAction_护盾盟友保护范围]
+autoTrigger:if self.numberOfUnitsInAllyNotOwnTeam(withTag='护盾发生器',greaterThan=0,withinRange=200) and not self.hasFlag(id=16)
+addResources:setFlag=16
+
+[hiddenAction_护盾盟友保护范围2]
+autoTrigger:if self.numberOfUnitsInAllyNotOwnTeam(withTag='护盾发生器2',greaterThan=0,withinRange=260) and not self.hasFlag(id=16)
+addResources:setFlag=16
+
+[hiddenAction_护盾盟友保护取消]
+autoTrigger:if not self.numberOfUnitsInAllyNotOwnTeam(withTag='护盾发生器',greaterThan=0,withinRange=260) and not self.hasUnitInTeam(withTag='护盾发生器',greaterThan=0,withinRange=260) and self.hasFlag(id=16)
+addResources:unsetFlag=16
+
+[hiddenAction_保护设置]
+autoTrigger:if self.hasFlag(id=16) and memory.装甲 != 999999
+setUnitMemory:装甲=999999
+
+
+[hiddenAction_保护取消设置]
+autoTrigger:if not self.hasFlag(id=16) and not self.hasFlag(id=18) and not self.hasFlag(id=9) and not self.globalTeamTags(includes="装甲1") and memory.装甲 != ${core.armour}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+setUnitMemory:装甲=${core.armour}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+
+
+#---流血---
+
+[hiddenAction_流血一阶]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.globalTeamTags(includes="流血") and not self.globalTeamTags(includes="无坚不摧")
+setResourcesWithLogic:lx=5
+
+[hiddenAction_流血额外伤害2]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.resource(type="lx") > 0
+addResources:hp:-40
+
+[hiddenAction_流血开始]
+autoTrigger:if self.resource(type="lx") > 0
+addResources:lx=-0.5,hp=-1
+
+#---腐蚀---
+
+[hiddenAction_腐蚀一阶]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.globalTeamTags(includes="腐蚀") and not self.globalTeamTags(includes="无坚不摧")
+setResourcesWithLogic:fs=5
+
+[hiddenAction_腐蚀开始]
+autoTrigger:if self.resource(type="fs") > 0
+addResources:fs=-0.5,msd=2,rsd=2
+
+#---高爆---
+
+[hiddenAction_高爆一阶]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.hasTakenDamage(withinSeconds=0.2) and lastDamagedBy.globalTeamTags(includes="高爆") and not lastDamagedBy.globalTeamTags(includes="高爆1") and not self.globalTeamTags(includes="抗高爆")
+spawnUnits:高爆中介(setToTeamOfLastAttacker=true)
+
+[hiddenAction_高爆二阶]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.hasTakenDamage(withinSeconds=0.2) and lastDamagedBy.globalTeamTags(includes="高爆1") and not self.globalTeamTags(includes="抗高爆")
+spawnUnits:高爆中介2(setToTeamOfLastAttacker=true)
+
+#---重甲---
+
+[hiddenAction_重甲初始]
+autoTrigger:if self.globalTeamTags(includes="重甲") and not self.hasFlag(id=10)
+setResourcesWithLogic:zj=30
+addResources:setFlag=10
+
+[hiddenAction_重甲开始]
+autoTrigger:if self.resource(type="zj") > 0
+addResources:zj=-0.5
+
+[hiddenAction_重甲设置]
+autoTrigger:if self.resource(type="zj") <= 0 and self.globalTeamTags(includes="重甲") and not self.hasFlag(id=9)
+addResources:setFlag=9
+
+[hiddenAction_重甲设置2]
+autoTrigger:if self.resource(type="zj") >0 and self.globalTeamTags(includes="重甲") and self.hasFlag(id=9)
+addResources:unsetFlag=9
+
+[hiddenAction_重甲真正设置]
+autoTrigger:if self.hasFlag(id=9) and memory.装甲 != 999999
+setUnitMemory:装甲=999999
+
+
+[hiddenAction_重甲真正设置2]
+autoTrigger:if not self.hasFlag(id=16) and not self.hasFlag(id=18) and not self.hasFlag(id=9) and not self.globalTeamTags(includes="装甲1") and memory.装甲 != ${core.armour}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+setUnitMemory:装甲=${core.armour}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+
+
+[hiddenAction_重甲消失]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.hasFlag(id=9)
+setResourcesWithLogic:zj=30
+setUnitMemory:装甲=${core.armour}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+addResources:unsetFlag=9,unsetFlag=10
+
+
+#---恢复---
+
+[hiddenAction_恢复1-1]
+autoTrigger:if self.globalTeamTags(includes="恢复1") and not self.globalTeamTags(includes="恢复2")
+addResources:hp=1,msd:-0.25,rsd:-0.5,shield=1
+
+[hiddenAction_恢复2-1]
+autoTrigger:if self.globalTeamTags(includes="恢复2") and not self.globalTeamTags(includes="恢复3")
+addResources:hp=2,msd:-0.5,rsd:-1,shield=2
+
+[hiddenAction_恢复3-1]
+autoTrigger:if self.globalTeamTags(includes="恢复3")
+addResources:hp=3,msd:-1,rsd:-2,shield=3
+
+#---护盾---
+
+[hiddenAction_护盾赋值]
+autoTriggerOnEvent:created
+setUnitStats:maxShield=memory.护盾
+
+[hiddenAction_护盾-1111]
+autoTrigger:if not self.globalTeamTags(includes="护盾1") and not self.globalTeamTags(includes="护盾2") and not self.globalTeamTags(includes="护盾3") and not self.globalTeamTags(includes="护盾4") and memory.护盾 != ${core.maxShield}+memory.jjhj*600+self.resource.dwjq*200+200*memory.防御者+100*memory.疾风
+setUnitMemory:护盾=${core.maxShield}+memory.jjhj*600+self.resource.dwjq*200+200*memory.防御者+100*memory.疾风
+setUnitStats:maxShield=memory.护盾
+
+[hiddenAction_护盾1]
+autoTrigger:if self.globalTeamTags(includes="护盾1") and not self.globalTeamTags(includes="护盾2") and not self.globalTeamTags(includes="护盾3") and not self.globalTeamTags(includes="护盾4") and memory.护盾 != ${core.maxShield+60}+memory.jjhj*600+self.resource.dwjq*200+200*memory.防御者+100*memory.疾风
+setUnitMemory:护盾=${core.maxShield+60}+memory.jjhj*600+self.resource.dwjq*200+200*memory.防御者+100*memory.疾风
+setUnitStats:maxShield=memory.护盾
+
+[hiddenAction_护盾2]
+autoTrigger:if self.globalTeamTags(includes="护盾2") and not self.globalTeamTags(includes="护盾3") and not self.globalTeamTags(includes="护盾4") and memory.护盾 != ${core.maxShield+150}+memory.jjhj*600+self.resource.dwjq*200+200*memory.防御者+100*memory.疾风
+setUnitMemory:护盾=${core.maxShield+150}+memory.jjhj*600+self.resource.dwjq*200+200*memory.防御者+100*memory.疾风
+setUnitStats:maxShield=memory.护盾
+
+[hiddenAction_护盾3]
+autoTrigger:if self.globalTeamTags(includes="护盾3") and not self.globalTeamTags(includes="护盾4") and memory.护盾 != ${core.maxShield+300}+memory.jjhj*600+self.resource.dwjq*200+200*memory.防御者+100*memory.疾风
+setUnitMemory:护盾=${core.maxShield+300}+memory.jjhj*600+self.resource.dwjq*200+200*memory.防御者+100*memory.疾风
+setUnitStats:maxShield=memory.护盾
+
+[hiddenAction_护盾4]
+autoTrigger:if self.globalTeamTags(includes="护盾4") and memory.护盾 != ${core.maxShield+600}+memory.jjhj*600+self.resource.dwjq*200+200*memory.防御者+100*memory.疾风
+setUnitMemory:护盾=${core.maxShield+600}+memory.jjhj*600+self.resource.dwjq*200+200*memory.防御者+100*memory.疾风
+setUnitStats:maxShield=memory.护盾
+
+#---抗火---
+
+[hiddenAction_燃烧攻击特殊1]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.globalTeamTags(includes="抗火1")
+addResources:rsd=-1
+
+[hiddenAction_燃烧攻击特殊2]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.globalTeamTags(includes="抗火2")
+addResources:rsd=-2
+
+#---装甲---
+
+[hiddenAction_装甲赋值]
+autoTrigger:true
+setUnitStats:armour=memory.装甲
+
+[hiddenAction_装甲1]
+autoTrigger:if self.globalTeamTags(includes="装甲1") and not self.globalTeamTags(includes="装甲2") and not self.globalTeamTags(includes="装甲3") and not self.hasFlag(id=9) and not self.hasFlag(id=16) and not self.hasFlag(id=18) and memory.装甲 != ${core.armour+5}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+setUnitMemory:装甲=${core.armour+5}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+
+
+[hiddenAction_装甲2]
+autoTrigger:if self.globalTeamTags(includes="装甲2") and not self.globalTeamTags(includes="装甲3") and not self.hasFlag(id=9) and not self.hasFlag(id=16) and not self.hasFlag(id=18) and memory.装甲 != ${core.armour+15}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+setUnitMemory:装甲=${core.armour+15}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+
+
+[hiddenAction_装甲3]
+autoTrigger:if self.globalTeamTags(includes="装甲3") and not self.hasFlag(id=9) and not self.hasFlag(id=16) and not self.hasFlag(id=18) and memory.装甲 != ${core.armour+30}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+setUnitMemory:装甲=${core.armour+30}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+
+
+[hiddenAction_装甲初始]
+autoTrigger:if not self.globalTeamTags(includes="装甲1") and not self.globalTeamTags(includes="装甲2") and not self.globalTeamTags(includes="装甲3") and not self.hasFlag(id=9) and not self.hasFlag(id=16) and not self.hasFlag(id=18) and memory.装甲 != ${core.armour}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+setUnitMemory:装甲=${core.armour}+30*memory.jjhj+20*memory.防御者+10*memory.暴君+5*memory.鹰眼+memory.防御者到守财奴*10+memory.fyzxg2
+
+
+#---视野---
+
+[hiddenAction_视野赋值]
+autoTriggerOnEvent:created
+setUnitStats:fogOfWarSightRange=memory.视野
+
+[hiddenAction_视野初始]
+autoTrigger:if not self.globalTeamTags(includes="射程1") and not self.globalTeamTags(includes="射程2") and not self.globalTeamTags(includes="射程3") and not self.globalTeamTags(includes="射程4") and memory.视野 != ${core.fogOfWarSightRange}
+setUnitMemory:视野=${core.fogOfWarSightRange}
+setUnitStats:fogOfWarSightRange=memory.视野
+
+#---攻击距离---
+
+[hiddenAction_攻击距离赋值]
+autoTriggerOnEvent:created
+setUnitStats:maxAttackRange=memory.攻击距离
+
+[hiddenAction_射程1]
+autoTrigger:if self.globalTeamTags(includes="射程1") and not self.globalTeamTags(includes="射程2") and not self.globalTeamTags(includes="射程3") and not self.globalTeamTags(includes="射程4") and memory.攻击距离 != (${attack.maxAttackRange+30}+4*self.resource.dj+memory.sjsc+80*memory.鹰眼+45*memory.巨兽+memory.鹰眼到防御者*40+memory.鹰眼到镜像*30+memory.巨兽到暴君*30-60*memory.防御者-30*memory.疾风-30*memory.暴君-60*memory.镜像-${attack.maxAttackRange*0.3}*memory.守财奴-${attack.maxAttackRange*0.4}*memory.yyxg2)*memory.停火
+setUnitMemory:攻击距离=(${attack.maxAttackRange+30}+4*self.resource.dj+memory.sjsc+80*memory.鹰眼+45*memory.巨兽+memory.鹰眼到防御者*40+memory.鹰眼到镜像*30+memory.巨兽到暴君*30-60*memory.防御者-30*memory.疾风-30*memory.暴君-60*memory.镜像-${attack.maxAttackRange*0.3}*memory.守财奴-${attack.maxAttackRange*0.4}*memory.yyxg2)*memory.停火,视野=${core.fogOfWarSightRange+3}+self.resource.dj+5*memory.鹰眼
+setUnitStats:maxAttackRange=memory.攻击距离,fogOfWarSightRange=memory.视野
+
+
+[hiddenAction_射程2]
+autoTrigger:if self.globalTeamTags(includes="射程2") and not self.globalTeamTags(includes="射程3") and not self.globalTeamTags(includes="射程4") and memory.攻击距离 != (${attack.maxAttackRange+60}+4*self.resource.dj+memory.sjsc+80*memory.鹰眼+45*memory.巨兽+memory.鹰眼到防御者*40+memory.鹰眼到镜像*30+memory.巨兽到暴君*30-60*memory.防御者-30*memory.疾风-30*memory.暴君-60*memory.镜像-${attack.maxAttackRange*0.3}*memory.守财奴-${attack.maxAttackRange*0.4}*memory.yyxg2)*memory.停火
+setUnitMemory:攻击距离=(${attack.maxAttackRange+60}+4*self.resource.dj+memory.sjsc+80*memory.鹰眼+45*memory.巨兽+memory.鹰眼到防御者*40+memory.鹰眼到镜像*30+memory.巨兽到暴君*30-60*memory.防御者-30*memory.疾风-30*memory.暴君-60*memory.镜像-${attack.maxAttackRange*0.3}*memory.守财奴-${attack.maxAttackRange*0.4}*memory.yyxg2)*memory.停火,视野=${core.fogOfWarSightRange+6}+self.resource.dj+5*memory.鹰眼
+setUnitStats:maxAttackRange=memory.攻击距离,fogOfWarSightRange=memory.视野
+
+[hiddenAction_射程3]
+autoTrigger:if self.globalTeamTags(includes="射程3") and not self.globalTeamTags(includes="射程4") and memory.攻击距离 != (${attack.maxAttackRange+90}+4*self.resource.dj+memory.sjsc+80*memory.鹰眼+45*memory.巨兽+memory.鹰眼到防御者*40+memory.鹰眼到镜像*30+memory.巨兽到暴君*30-60*memory.防御者-30*memory.疾风-30*memory.暴君-60*memory.镜像-${attack.maxAttackRange*0.3}*memory.守财奴-${attack.maxAttackRange*0.4}*memory.yyxg2)*memory.停火
+setUnitMemory:攻击距离=(${attack.maxAttackRange+90}+4*self.resource.dj+memory.sjsc+80*memory.鹰眼+45*memory.巨兽+memory.鹰眼到防御者*40+memory.鹰眼到镜像*30+memory.巨兽到暴君*30-60*memory.防御者-30*memory.疾风-30*memory.暴君-60*memory.镜像-${attack.maxAttackRange*0.3}*memory.守财奴-${attack.maxAttackRange*0.4}*memory.yyxg2)*memory.停火,视野=${core.fogOfWarSightRange+9}+self.resource.dj+5*memory.鹰眼
+setUnitStats:maxAttackRange=memory.攻击距离,fogOfWarSightRange=memory.视野
+
+[hiddenAction_射程4]
+autoTrigger:if self.globalTeamTags(includes="射程4") and memory.攻击距离 != (${attack.maxAttackRange+120}+4*self.resource.dj+memory.sjsc+80*memory.鹰眼+45*memory.巨兽+memory.鹰眼到防御者*40+memory.鹰眼到镜像*30+memory.巨兽到暴君*30-60*memory.防御者-30*memory.疾风-30*memory.暴君-60*memory.镜像-${attack.maxAttackRange*0.3}*memory.守财奴-${attack.maxAttackRange*0.4}*memory.yyxg2)*memory.停火
+setUnitMemory:攻击距离=(${attack.maxAttackRange+120}+4*self.resource.dj+memory.sjsc+80*memory.鹰眼+45*memory.巨兽+memory.鹰眼到防御者*40+memory.鹰眼到镜像*30+memory.巨兽到暴君*30-60*memory.防御者-30*memory.疾风-30*memory.暴君-60*memory.镜像-${attack.maxAttackRange*0.3}*memory.守财奴-${attack.maxAttackRange*0.4}*memory.yyxg2)*memory.停火,视野=${core.fogOfWarSightRange+12}+self.resource.dj+5*memory.鹰眼
+setUnitStats:maxAttackRange=memory.攻击距离,fogOfWarSightRange=memory.视野
+
+[hiddenAction_攻击距离初始]
+autoTriggerOnEvent:created
+setUnitMemory:攻击距离=${attack.maxAttackRange}
+setUnitStats:maxAttackRange=memory.攻击距离
+
+[hiddenAction_攻击距离初始2]
+autoTrigger:if not self.globalTeamTags(includes="射程1") and not self.globalTeamTags(includes="射程2") and not self.globalTeamTags(includes="射程3") and not self.globalTeamTags(includes="射程4") and memory.攻击距离 != (${attack.maxAttackRange}+4*self.resource.dj+memory.sjsc+80*memory.鹰眼+45*memory.巨兽+memory.鹰眼到防御者*40+memory.鹰眼到镜像*30+memory.巨兽到暴君*30-60*memory.防御者-30*memory.疾风-30*memory.暴君-60*memory.镜像-${attack.maxAttackRange*0.3}*memory.守财奴-${attack.maxAttackRange*0.4}*memory.yyxg2)*memory.停火
+setUnitMemory:攻击距离=(${attack.maxAttackRange}+4*self.resource.dj+memory.sjsc+80*memory.鹰眼+45*memory.巨兽+memory.鹰眼到防御者*40+memory.鹰眼到镜像*30+memory.巨兽到暴君*30-60*memory.防御者-30*memory.疾风-30*memory.暴君-60*memory.镜像-${attack.maxAttackRange*0.3}*memory.守财奴-${attack.maxAttackRange*0.4}*memory.yyxg2)*memory.停火
+setUnitStats:maxAttackRange=memory.攻击距离,fogOfWarSightRange=memory.视野
+
+#---伤害乘数---
+
+[hiddenAction_伤害乘数赋值]
+autoTriggerOnEvent:created
+setUnitStats:shootDamageMultiplier=memory.伤害乘数
+
+[hiddenAction_伤害1]
+autoTrigger:if self.globalTeamTags(includes="伤害1") and not self.globalTeamTags(includes="伤害2") and not self.globalTeamTags(includes="伤害3") and not self.globalTeamTags(includes="伤害4") and not self.globalTeamTags(includes="伤害5") and not self.hasFlag(id=15) and memory.伤害乘数 != 1.4*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitMemory:伤害乘数=1.4*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitStats:shootDamageMultiplier=memory.伤害乘数
+
+[hiddenAction_惊人伤害1]
+autoTrigger:if self.globalTeamTags(includes="伤害1") and self.hasFlag(id=15) and not self.globalTeamTags(includes="伤害2") and not self.globalTeamTags(includes="伤害3") and not self.globalTeamTags(includes="伤害4") and not self.globalTeamTags(includes="伤害5") and memory.伤害乘数 != 2.1*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitMemory:伤害乘数=2.1*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitStats:shootDamageMultiplier=memory.伤害乘数
+
+[hiddenAction_伤害2]
+autoTrigger:if self.globalTeamTags(includes="伤害2") and not self.globalTeamTags(includes="伤害3") and not self.globalTeamTags(includes="伤害4") and not self.globalTeamTags(includes="伤害5") and not self.hasFlag(id=15) and memory.伤害乘数 != 1.8*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitMemory:伤害乘数=1.8*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitStats:shootDamageMultiplier=memory.伤害乘数
+
+[hiddenAction_惊人伤害2]
+autoTrigger:if self.globalTeamTags(includes="伤害2") and self.hasFlag(id=15) and not self.globalTeamTags(includes="伤害3") and not self.globalTeamTags(includes="伤害4") and not self.globalTeamTags(includes="伤害5") and memory.伤害乘数 != 2.7*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitMemory:伤害乘数=2.7*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitStats:shootDamageMultiplier=memory.伤害乘数
+
+[hiddenAction_伤害3]
+autoTrigger:if self.globalTeamTags(includes="伤害3") and not self.globalTeamTags(includes="伤害4") and not self.globalTeamTags(includes="伤害5") and not self.hasFlag(id=15) and not self.hasFlag(id=15) and memory.伤害乘数 != 2.2*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitMemory:伤害乘数=2.2*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitStats:shootDamageMultiplier=memory.伤害乘数
+
+[hiddenAction_惊人伤害3]
+autoTrigger:if self.globalTeamTags(includes="伤害3") and self.hasFlag(id=15) and not self.globalTeamTags(includes="伤害4") and not self.globalTeamTags(includes="伤害5") and memory.伤害乘数 != 3.3*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitMemory:伤害乘数=3.3*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitStats:shootDamageMultiplier=memory.伤害乘数
+
+[hiddenAction_伤害4]
+autoTrigger:if self.globalTeamTags(includes="伤害4") and not self.globalTeamTags(includes="伤害5") and not self.hasFlag(id=15) and memory.伤害乘数 != 2.6*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitMemory:伤害乘数=2.6*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitStats:shootDamageMultiplier=memory.伤害乘数
+
+[hiddenAction_惊人伤害4]
+autoTrigger:if self.globalTeamTags(includes="伤害4") and self.hasFlag(id=15) and not self.globalTeamTags(includes="伤害5") and memory.伤害乘数 != 3.9*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitMemory:伤害乘数=3.9*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitStats:shootDamageMultiplier=memory.伤害乘数
+
+[hiddenAction_伤害5]
+autoTrigger:if self.globalTeamTags(includes="伤害5") and not self.hasFlag(id=15) and memory.伤害乘数 != 3*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitMemory:伤害乘数=3*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitStats:shootDamageMultiplier=memory.伤害乘数
+
+[hiddenAction_惊人伤害5]
+autoTrigger:if self.globalTeamTags(includes="伤害5") and self.hasFlag(id=15) and memory.伤害乘数 != 4.5*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitMemory:伤害乘数=4.5*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitStats:shootDamageMultiplier=memory.伤害乘数
+
+[hiddenAction_伤害乘数初始]
+autoTriggerOnEvent:created
+setUnitMemory:伤害乘数=1*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitStats:shootDamageMultiplier=memory.伤害乘数
+
+[hiddenAction_伤害乘数初始2]
+autoTrigger:if not self.globalTeamTags(includes="伤害1") and not self.globalTeamTags(includes="伤害2") and not self.globalTeamTags(includes="伤害3") and not self.globalTeamTags(includes="伤害4") and not self.globalTeamTags(includes="伤害5") and not self.hasFlag(id=15) and memory.伤害乘数 != 1*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitMemory:伤害乘数=1*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitStats:shootDamageMultiplier=memory.伤害乘数
+
+[hiddenAction_惊人伤害乘数初始]
+autoTrigger:if not self.globalTeamTags(includes="伤害1") and not self.globalTeamTags(includes="伤害2") and not self.globalTeamTags(includes="伤害3") and not self.globalTeamTags(includes="伤害4") and not self.globalTeamTags(includes="伤害5") and self.hasFlag(id=15) and memory.伤害乘数 != 1.5*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitMemory:伤害乘数=1.5*memory.guasha+self.resource.dj*0.04*memory.guasha+memory.sjsh+0.6*memory.巨兽*memory.guasha+1*memory.暴君*memory.guasha+memory.暴君到镜像*0.3*memory.guasha+memory.暴君到鹰眼*0.4+memory.镜像到防御者*0.2*memory.guasha-0.5*memory.鹰眼*memory.guasha-memory.防御者*memory.guasha*0.7-0.4*memory.疾风*memory.guasha-0.55*memory.守财奴*memory.guasha-0.5*memory.镜像*memory.guasha
+setUnitStats:shootDamageMultiplier=memory.伤害乘数
+
+#---燃烧---
+
+[hiddenAction_燃烧初始]
+autoTriggerOnEvent:created
+addResources:rsd=0
+
+[hiddenAction_燃烧攻击--1]
+autoTriggerOnEvent:tookDamage(withTag="抛物线")
+requireConditional:if self.shield() <= 10 and self.resource(type="bm") <= 0 and not self.globalTeamTags(includes="无坚不摧")
+addResources:rsd=1
+
+[hiddenAction_燃烧攻击1]
+autoTriggerOnEvent:tookDamage(withTag="普通子弹")
+requireConditional:if self.shield() <= 10 and self.resource(type="bm") <= 0 and not self.globalTeamTags(includes="无坚不摧")
+addResources:rsd=1
+
+[hiddenAction_燃烧攻击2]
+autoTriggerOnEvent:tookDamage(withTag="坦克炮")
+requireConditional:if self.shield() <= 10 and self.resource(type="bm") <= 0
+addResources:rsd=2
+
+[hiddenAction_燃烧攻击3]
+autoTriggerOnEvent:tookDamage(withTag="大口径")
+requireConditional:if self.shield() <= 10 and self.resource(type="bm") <= 0
+addResources:rsd=5
+
+[hiddenAction_燃烧攻击5]
+autoTriggerOnEvent:tookDamage(withTag="无法")
+requireConditional:if self.shield() <= 10 and self.resource(type="bm") <= 0
+addResources:rsd=4
+
+[hiddenAction_燃烧攻击4]
+autoTriggerOnEvent:tookDamage(withTag="燃烧")
+requireConditional:if self.shield() <= 10 and self.resource(type="bm") <= 0
+addResources:rsd=10
+
+[hiddenAction_燃烧检查]
+autoTrigger:if self.resource(type="rsd",greaterThan=${core.radius*2+19}) and not self.hasFlag(id=2)
+addResources:setFlag=2
+
+[hiddenAction_燃烧取消检查]
+autoTrigger:if self.resource(type="rsd",lessThan=${core.radius*2}) and self.hasFlag(id=2)
+addResources:unsetFlag=2
+
+[hiddenAction_燃烧检查1]
+autoTrigger:if self.resource(type="rsd",greaterThan=${core.radius*2+20})
+setResourcesWithLogic:rsd=${core.radius*2+20}
+
+[hiddenAction_燃烧检查2]
+autoTrigger:if self.resource(type="rsd",lessThan=0)
+setResourcesWithLogic:rsd=0
+
+[action_燃烧修复]
+text:灭火
+description:因为子弹摩擦生热,到达了着火点了,请赶快灭火
+displayType:action
+ai_isHighPriority:true
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/bubbles_1.png
+pos:-1
+isGuiBlinking:true
+allowMultipleInQueue:false
+isVisible:if self.hasFlag(id=2) and not self.hasUnitInTeam(withTag="建筑加强")
+buildSpeed:${3*core.radius*0.04}s
+addResources:unsetFlag:2
+setResourcesWithLogic:rsd=0
+temporarilyRemoveTags:燃烧建筑
+
+[action_燃烧触发]
+autoTrigger:if self.hasFlag(id=2)
+isVisible:false
+spawnEffects:CUSTOM:ambientSmoke
+addResources:hp=-3,msd=0.25
+takeResources:rsd=-1
+takeResources_includeUnitsWithinRange:${core.radius+40}
+takeResources_includeUnitsWithinRange_team:any
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+[decal_燃烧]
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/fire_small.png
+imageScaleX:1
+alwaysStartDirAtZero:true
+imageScaleY:1
+imageScale:${core.radius*0.02+0.5}
+isVisible:if self.hasFlag(id=2) and self.hp > 0
+yOffsetAbsolute:0
+
+#---磨损---
+
+[hiddenAction_磨损攻击--1]
+autoTriggerOnEvent:tookDamage(withTag="抛物线")
+requireConditional:if self.shield() <= 10 and self.resource(type="bm") <= 0 and not self.globalTeamTags(includes="无坚不摧")
+addResources:msd=0.2
+
+[hiddenAction_磨损攻击1]
+autoTriggerOnEvent:tookDamage(withTag="普通子弹")
+requireConditional:if self.shield() <= 10 and self.resource(type="bm") <= 0 and not self.globalTeamTags(includes="无坚不摧")
+addResources:msd=0.2
+
+[hiddenAction_磨损攻击2]
+autoTriggerOnEvent:tookDamage(withTag="坦克炮")
+addResources:msd=0.5
+requireConditional:if self.shield() <= 10 and self.resource(type="bm") <= 0
+
+[hiddenAction_磨损击3]
+autoTriggerOnEvent:tookDamage(withTag="大口径")
+addResources:msd=0.8
+requireConditional:if self.shield() <= 10 and self.resource(type="bm") <= 0
+
+[hiddenAction_磨损攻击5]
+autoTriggerOnEvent:tookDamage(withTag="无法")
+addResources:msd=0.25
+requireConditional:if self.shield() <= 10 and self.resource(type="bm") <= 0
+
+[hiddenAction_磨损攻击4]
+autoTriggerOnEvent:tookDamage(withTag="燃烧")
+addResources:msd=0.25
+requireConditional:if self.shield() <= 10 and self.resource(type="bm") <= 0
+
+
+[hiddenAction_磨损限制]
+autoTrigger:if self.resource(type='msd') > 55*${core.radius*0.05}
+setResourcesWithLogic:msd:55*${core.radius*0.05}
+
+[hiddenAction_磨损限制2]
+autoTrigger:if self.resource(type='msd') <= 0
+setResourcesWithLogic:msd:0
+
+
+#---等级制度---
+
+
+
+#--伤害计算--
+
+[hiddenAction_当前生命]
+autoTrigger:true
+autoTriggerOnEvent:created
+setResourcesWithLogic:sm = self.hp
+
+[hiddenAction_设置伤害]
+autoTriggerOnEvent:tookDamage
+setResourcesWithLogic:sh = self.resource.sm-self.hp
+
+[hiddenAction_清除伤害]
+autoTrigger:if self.hasTakenDamage(laterThanSeconds=0.005) and self.resource.sh != 0
+setResourcesWithLogic:sh = 0,sm = self.hp
+
+#---装甲韧性---
+
+[hiddenAction_韧性]
+autoTriggerOnEvent:tookDamage
+addResourcesWithLogic:hp=((self.resource.sh*self.resource.dj)*0.02)
+requireConditional:if self.resource.sh >= 0
+
+#---伤害溢出---
+
+[hiddenAction_溢出]
+autoTriggerOnEvent:tookDamage
+requireConditional:if self.resource.dj > 5 and self.resource.sh > 100*self.resource.dj and self.hasTakenDamage(withinSeconds=0.5) and self.resource.sh >= 0
+addResourcesWithLogic:hp:self.resource.sh*0.2
+
+#---炽热弹头---
+
+[hiddenAction_炽热计时]
+autoTrigger:if self.resource.dj > 7 and self.resource.crdtsy != 30 and self.resource.crdtsy <= 0
+addResources:crdtsy:30
+
+[hiddenAction_炽热倒计时]
+autoTrigger:if self.resource.crdtsy > 1
+addResources:crdtsy=-0.5
+
+[hiddenAction_炽热]
+autoTrigger:if self.resource.crdtsy > 0 and self.resource.crdtsy <= 2 and not self.hasFlag(id=5)
+addResources:setFlag:5
+
+[hiddenAction_炽热触发]
+autoTrigger:if attacking.hasTakenDamage(withinSeconds=1) and self.hasFlag(id=5)
+addResources:unsetFlag:5
+setResourcesWithLogic:crdtsy=0
+
+
+[hiddenAction_炽热弹头倒计时]
+autoTrigger:if self.resource.crdt > 1
+addResources:crdt=-0.5
+takeResources:rsd=-99999
+takeResources_includeUnitsWithinRange:${core.radius+50}
+takeResources_includeUnitsWithinRange_team:own
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+[hiddenAction_敌人炽热]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.hasFlag(id=5)
+addResources:crdt:3
+
+#---纳米恢复---
+
+[hiddenAction_纳米恢复]
+autoTriggerOnEvent:destroyed
+requireConditional:if self.resource.dj >= 12
+spawnEffects:CUSTOM:111
+alsoTriggerAction:纳米技能1,纳米技能2,纳米技能1l,纳米技能2ll,纳米技能1lll,纳米技能2llll,纳米技能1lllll,纳米技能2lllll
+
+[hiddenAction_纳米技能1]
+takeResources:hp=-99999
+takeResources_includeUnitsWithinRange:${core.radius+100}
+takeResources_includeUnitsWithinRange_team:own
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+[hiddenAction_纳米技能2]
+takeResources:hp=-99999
+takeResources_includeUnitsWithinRange:${core.radius+100}
+takeResources_includeUnitsWithinRange_team:ally
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+[hiddenAction_纳米技能1l]
+takeResources:msd:20
+takeResources_includeUnitsWithinRange:${core.radius+100}
+takeResources_includeUnitsWithinRange_team:own
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+[hiddenAction_纳米技能2ll]
+takeResources:msd:20
+takeResources_includeUnitsWithinRange:${core.radius+100}
+takeResources_includeUnitsWithinRange_team:ally
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+[hiddenAction_纳米技能1lll]
+takeResources:rsd:20
+takeResources_includeUnitsWithinRange:${core.radius+100}
+takeResources_includeUnitsWithinRange_team:own
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+[hiddenAction_纳米技能2llll]
+takeResources:rsd:20
+takeResources_includeUnitsWithinRange:${core.radius+100}
+takeResources_includeUnitsWithinRange_team:ally
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+[hiddenAction_纳米技能1lllll]
+takeResources:energy=-99999
+takeResources_includeUnitsWithinRange:${core.radius+100}
+takeResources_includeUnitsWithinRange_team:own
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+[hiddenAction_纳米技能2lllll]
+takeResources:energy=-99999
+takeResources_includeUnitsWithinRange:${core.radius+100}
+takeResources_includeUnitsWithinRange_team:ally
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+#---不知道起什么名字---
+
+[hiddenAction_能量累计]
+autoTriggerOnEvent:killedAnyUnit
+requireConditional:if self.resource.dj >= 10 and self.resource.ljnl < 15
+addResources:ljnl=1
+
+[hiddenAction_暴毙]
+autoTriggerOnEvent:killedAnyUnit
+requireConditional:if attacking.resource.ljnl >= 15
+addResources:hp=-999999
+
+#---荆棘---
+
+[hiddenAction_反伤荆棘]
+autoTrigger:if attacking.hasTakenDamage(withinSeconds=0.5) and attacking.resource.dj >= 15
+addResourcesWithLogic:hp=attacking.resource.sh*-0.5
+
+#---连续得分---
+
+[hiddenAction_初始连续检测]
+autoTriggerOnEvent:killedAnyUnit
+requireConditional:if self.resource.lxdf < 30
+addResourcesWithLogic:lxdf=5
+
+[hiddenAction_连续得分倒计时]
+autoTrigger:if self.resource.lxdf > 0
+addResources:lxdf=-0.5
+
+[hiddenAction_连续得分倒计时2]
+autoTrigger:if self.resource.lxdf > 0 and not self.isAttacking()
+addResources:lxdf=-5
+
+[hiddenAction_连续得分结束]
+autoTrigger:if self.resource.lxdf > 30
+setResourcesWithLogic:lxdf=30
+
+[hiddenAction_连续得分等级--]
+autoTrigger:if self.resource.lxdf < 5 and self.resource.lxdfdj != 0
+setResourcesWithLogic:lxdfdj = 0
+
+[hiddenAction_连续得分等级]
+autoTrigger:if self.resource.lxdf >= 5 and self.resource.lxdf <= 10 and self.resource.lxdfdj != 1
+setResourcesWithLogic:lxdfdj = 1
+
+[hiddenAction_连续得分等级2]
+autoTrigger:if self.resource.lxdf >= 10 and self.resource.lxdf <= 15 and self.resource.lxdfdj != 2
+setResourcesWithLogic:lxdfdj = 2
+
+[hiddenAction_连续得分等级3]
+autoTrigger:if self.resource.lxdf >= 15 and self.resource.lxdf <= 20 and self.resource.lxdfdj != 3
+setResourcesWithLogic:lxdfdj = 3
+
+[hiddenAction_连续得分等级4]
+autoTrigger:if self.resource.lxdf >= 20 and self.resource.lxdf <= 25 and self.resource.lxdfdj != 4
+setResourcesWithLogic:lxdfdj = 4
+
+[hiddenAction_连续得分等级5]
+autoTrigger:if self.resource.lxdf >= 25 and self.resource.lxdf <= 30 and self.resource.lxdfdj != 5
+setResourcesWithLogic:lxdfdj = 5
+
+[hiddenAction_初始杀敌连续检测]
+autoTriggerOnEvent:killedAnyUnit
+requireConditional:if self.resource.lxdf > 5
+addResourcesWithLogic:djds=5*self.resource.lxdfdj
+
+#---等级点数切换---
+
+[hiddenAction_等级点数切换]
+autoTrigger:if self.resource.djds >= (memory.syds1*self.resource.dj+20) and self.resource.dj >= 25
+addResourcesWithLogic:djds1:self.resource.djds
+alsoTriggerAction:等级点数切换2
+
+[hiddenAction_等级点数切换2]
+setResourcesWithLogic:djds = 0
+
+#等级
+
+[hiddenAction_生命初始]
+autoTriggerOnEvent:created
+setUnitMemory:生命=${core.maxHp}
+setUnitStats:maxHp=memory.生命
+
+[hiddenAction_什么初始2]
+autoTrigger:true
+setUnitStats:maxHp=memory.生命
+
+[hiddenAction_等级多少]
+autoTriggerOnEvent:created
+setUnitMemory:syds1=${core.radius*1.5}
+
+[hiddenAction_击杀获得点数]
+autoTriggerOnEvent:killedAnyUnit
+addResources:djds=10
+setResourcesWithLogic:jsjs=2
+
+[hiddenAction_等级升级]
+autoTrigger:if self.resource.djds >= (memory.syds1*self.resource.dj+20) and self.resource.dj < 25
+addResources:dj=1,hfjs:3
+addResourcesWithLogic:djds:(memory.syds1*self.resource.dj*-1)
+playSoundToPlayer:ROOT:[WarField][战争之地]/-shared-/-音效-/科技升级.ogg:0.5
+alsoTriggerAction:生命增加
+
+[hiddenAction_恢复倒计时]
+autoTrigger:if self.resource.hfjs > 0
+addResources:hfjs=0.5
+
+[hiddenAction_恢复计时2]
+autoTrigger:if self.resource.hfjs > 2
+addResources:hp:99999,shield:9999
+
+[hiddenAction_恢复计时3]
+autoTrigger:if self.resource.hfjs > 5
+addResources:hp:99999,shield:9999
+setResourcesWithLogic:hfjs=0
+
+[hiddenAction_等级限制]
+autoTrigger:if self.resource.dj > 15
+setResourcesWithLogic:dj=15
+
+[hiddenAction_生命增加]
+#alsoTriggerAction:生命增加2
+autoTrigger:true
+setUnitMemory:生命=${core.maxHp*0.1}*self.resource.dj+${core.maxHp}+${core.maxHp}*self.resource.dwjq*0.3+${core.maxHp}*memory.jjhj*2+${core.maxHp}*self.resource.ptjq*0.2+memory.jsxg3*${core.maxHp*0.1}+memory.sjsm+memory.防御者*${core.maxHp}+memory.巨兽*${core.maxHp}*0.5+memory.防御者到疾风*${core.maxHp*0.2}+memory.镜像到守财奴*${core.maxHp*0.3}-memory.暴君*${core.maxHp}*0.2-memory.镜像*${core.maxHp}*0.3
+
+#---等级差---
+
+[hiddenAction_等级差]
+autoTriggerOnEvent:killedAnyUnit
+requireConditional:if attacking.resource.dj > self.resource.dj
+addResourcesWithLogic:djds=attacking.resource.dj*20
+
+#---嗜血---
+
+[hiddenAction_嗜血击杀2]
+autoTriggerOnEvent:killedAnyUnit
+requireConditional:if self.resource.dj > 0
+addResourcesWithLogic:hp=memory.生命*(self.resource.dj*0.02)
+
+#---随机
+
+[action_换弹]
+addResourcesWithLogic:energy=99999
+
+[action_随机属性显示]
+text:随机属性\n点击查看详情
+description:--该单位的随机属性--\n血量: 原始:${core.maxHp} 当前:%{memory.生命} 随机值:%{memory.sjsm}\n伤害: 原始:1 当前:%{memory.伤害乘数} 随机值:%{memory.sjsh}\n射程: 原始:${attack.maxAttackRange} 当前:%{memory.攻击距离} 随机值:%{memory.sjsc}\n弹容量: 原始:${core.energyMax} 当前:%{memory.弹容量} 随机值:%{memory.sjdrl}\n建造速度: 原始:1 当前:%{memory.jzsd} 随机值:%{memory.sjjzsd}
+displayType:infoOnlyNoBox
+buildSpeed:0
+isActive:false
+pos:21
+isVisible:if self.globalTeamTags(includes='阳寿')
+
+[hiddenAction_阳寿初始]
+autoTriggerOnEvent:created
+requireConditional:if self.globalTeamTags(includes='阳寿')
+setUnitMemory:sjsh=rnd(-4,4),sjsm=rnd(${core.maxHp*-0.45},${core.maxHp*0.45}),sjsc=int(rnd(${attack.maxAttackRange*-0.7},${attack.maxAttackRange*0.7})),sjjzsd=rnd(0,2)
+setUnitStats:maxEnergy=memory.弹容量
+alsoTriggerAction:弹容量随机触发
+
+[hiddenAction_正常初始]
+autoTriggerOnEvent:created
+requireConditional:if not self.globalTeamTags(includes='阳寿')
+setUnitMemory:sjjzsd=1
+
+[hiddenAction_弹容量触发]
+autoTrigger:if self.globalTeamTags(includes='阳寿')
+setUnitStats:maxEnergy=memory.弹容量
+
+[hiddenAction_弹容量随机触发]
+autoTrigger:if self.maxEnergy == 0 and self.globalTeamTags(includes='阳寿')
+setUnitMemory:弹容量=${core.energyMax}+memory.sjdrl
+alsoTriggerAction:弹容量随机
+
+[hiddenAction_弹容量随机]
+autoTrigger:if memory.sjdrl == 0 and memory.弹容量定量 != true and self.globalTeamTags(includes='阳寿')
+setUnitMemory:sjdrl=int(rnd(${core.energyMax*-0.8},${core.energyMax*1})),弹容量定量=true
+alsoTriggerAction:弹容量加载
+
+[hiddenAction_弹容量加载]
+setUnitMemory:弹容量=${core.energyMax}+memory.sjdrl
+
+[hiddenAction_弹药随机]
+autoTrigger:if attacking.hasTakenDamage(withinSeconds=0.5) and self.globalTeamTags(includes='阳寿')
+setUnitMemory:sjdy=int(rnd(0,20))
+
+[hiddenAction_弹药随机]
+autoTrigger:if attacking.hasTakenDamage(withinSeconds=0.5) and self.globalTeamTags(includes='阳寿')
+setUnitMemory:sjdy=int(rnd(0,20))
+
+[hiddenAction_弹药_流血]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.readUnitMemory('sjdy',type='number') == 7
+setResourcesWithLogic:lx=5
+
+[hiddenAction_弹药_腐蚀]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.readUnitMemory('sjdy',type='number') == 11
+setResourcesWithLogic:fs=5
+
+[hiddenAction_弹药_击退]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.readUnitMemory('sjdy',type='number') == 13
+spawnUnits:击退中介(setToTeamOfLastAttacker=true)
+
+[hiddenAction_弹药_荆棘]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.readUnitMemory('sjdy',type='number') == 15
+addResourcesWithLogic:hp=-50
+
+[hiddenAction_弹药_自爆]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.readUnitMemory('sjdy',type='number') == 17
+setUnitMemory:zib1=true
+
+[hiddenAction_弹药_高爆]
+autoTriggerOnEvent:tookDamage
+requireConditional:if lastDamagedBy.readUnitMemory('sjdy',type='number') == 19
+spawnUnits:高爆中介(setToTeamOfLastAttacker=true)
+
+#---其他---
+
+[action_无法换弹]
+isVisible:false
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/ammo.png
+
+#---属性显示---
+
+[action_纳米恢复显示]
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/纳米恢复.png
+text:纳米恢复
+description:--机制简介--\n此单位死亡后\n对自身半径+80的范围内的友军单位\n减少磨损度和燃烧点\n瞬间恢复生命\n瞬间回满能量值
+buildSpeed:0
+pos:21.1
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource.dj >= 12
+
+[action_炽热弹头]
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/炽热弹头.png
+text:炽热弹头
+description:--机制简介--\n对面受到此次伤害时\n使周围所有单位燃烧且无法灭火\n持续3s\n缓冲30s时间
+buildSpeed:0
+pos:21.1
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.hasFlag(id=5)
+
+[action_连续得分]
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/连续得分.png
+text:连续得分
+description:--机制简介--\n此区间内杀敌获得%{self.resource.lxdfdj*5}等级点数
+buildSpeed:0
+pos:21.1
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource.lxdf > 5
+
+[action_反伤护盾]
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/荆棘.png
+text:荆棘
+description:--机制简介--\n自身所受的伤害的50%无条件还给敌人\n而且敌人次时受到的伤害无视一切护甲\n条件:等级大于等于15
+buildSpeed:0
+pos:21.1
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource.dj >= 15
+
+[action_伤害溢出]
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/过载护盾.png
+text:过载护甲
+description:--机制简介--\n当自身受到伤害大于%{100*self.resource.dj}时,减少20%的伤害\n注意:前提是没有一击必杀的情况\n条件:等级大于5(但不包括5级)
+buildSpeed:0
+pos:21.1
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource.dj > 5
+
+[action_死亡反甲]
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/死亡反甲.png
+text:死亡反甲
+description:还差%{15-self.resource.ljnl}个人头\n--机制简介--\n当自身击杀数量超过15后启用\n启用后,敌人击杀该单位后也会直接暴毙\n条件:击杀数量超过15,等级大于等于10
+buildSpeed:0
+pos:21.1
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource.dj >= 10
+
+[action_show等级]
+#infoOnly:true
+isAlsoViewableByAllies:true
+isAlsoViewableByEnemies:true
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/等级.png
+text:等级\n%{self.resource(type='dj')}级
+description:当前等级%{self.resource(type='dj')}/25\n距离下次升级还差%{(memory.syds1*self.resource.dj+20)-self.resource(type="djds")}等级点数\n每级最大血量增加${core.maxHp*0.1}\n装甲韧性增加%{self.resource.dj*2}%(减伤%{self.resource.dj*2}%)\n嗜血%{self.resource.dj}级(杀敌恢复%{int(memory.生命*(self.resource.dj*0.02))}血量)\n伤害乘数总体增加%{self.resource.dj*0.04}\n射程总体增加%{self.resource.dj*4}\n---机制简介---\n每击杀一个单位获得10等级点数\n如果击杀的这个单位等级比自己高\n则获得其等级20倍的等级点数\n有点石成金后额外获10等级点数\n6.8.10.13.15级时,会有不同的被动技能
+buildSpeed:0
+pos:21
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:true
+
+[action_等级提升]
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/等级提升.png
+text:提升等级
+ai_isHighPriority:true
+description:将你的等级点数赋予该单位\n需要%{(memory.syds1*self.resource.dj+20)*1.5}个等级点数
+buildSpeed:1s
+allowMultipleInQueue:false
+pos:21
+displayType:infoOnlyNoBox
+playSoundToPlayer:ROOT:[WarField][战争之地]/-shared-/-音效-/科技升级.ogg
+addResourcesWithLogic:djds1=((memory.syds1*self.resource.dj+20)*1.5)*-1,dj:1
+addResources:hfjs:3
+isActive:true
+alsoTriggerAction:生命增加
+isVisible:if self.resource.djds1 >= (memory.syds1*self.resource.dj+20)*1.5 and self.resource.dj < 25
+
+[action_show玩火自焚]
+#infoOnly:true
+text:玩火自焚
+description:该单位燃烧时\n敌人以此单位为攻击目标时\n会直接燃烧
+buildSpeed:0s
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/玩火自焚.png
+pos:18
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.globalTeamTags(includes="玩火自焚")
+
+[action_show重甲值]
+#infoOnly:true
+text:重甲缓冲时间\n%{int(self.resource(type="zj"))}s
+description:倒计时结束后,该单位对下一次攻击免疫
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/重新.png
+buildSpeed:0s
+pos:18
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type="zj") > 0
+
+[action_show武士流血]
+#infoOnly:true
+text:流血状态\n剩余%{int(self.resource(type="wslx"))}s
+description:该单位正在受到武士机甲造成的流血效果
+buildSpeed:0s
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/blood.png
+pos:21
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type="wslx") > 0
+
+[action_show重甲]
+#infoOnly:true
+text:重甲防御
+description:该单位对下一次攻击免疫
+buildSpeed:0s
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/盾.png
+pos:18
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.hasFlag(id=9)
+
+[action_show腐蚀]
+#infoOnly:true
+text:腐蚀状态\n剩余%{int(self.resource(type="fs"))}s
+description:该单位正在受到腐蚀效果
+buildSpeed:0s
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/病毒.png
+pos:20
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type="fs") > 0
+
+[action_show不灭金身1]
+#infoOnly:true
+text:不灭金身缓冲\n%{int(self.resource(type="bmjs"))}s
+description:倒计时结束后,获得不灭金身buff
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/不灭金身.png
+buildSpeed:0s
+pos:20
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type="bmjs") > 0
+
+[action_show不灭金身2]
+#infoOnly:true
+text:不灭金身\n剩余%{int(self.resource(type="bm"))}s
+description:不灭金身buff的剩余时间
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/不灭金身.png
+buildSpeed:0s
+pos:20
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type="bm") > 0
+
+[action_show惊人1]
+#infoOnly:true
+text:惊人一刻缓冲时间\n%{int(self.resource(type="jr"))}s
+description:倒计时结束后,获得惊人一刻buff
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/惊人.png
+buildSpeed:0s
+pos:20
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type="jr") > 0
+
+[action_show惊人2]
+#infoOnly:true
+text:惊人一刻\n剩余%{int(self.resource(type="jrsy"))}s
+description:惊人一刻buff的剩余时间
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/惊人.png
+buildSpeed:0s
+pos:20
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type="jrsy") > 0
+
+[action_show流血]
+#infoOnly:true
+text:流血状态\n剩余%{int(self.resource(type="lx"))}s
+description:该单位正在受到流血效果
+buildSpeed:0s
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/blood.png
+pos:21
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type="lx") > 0
+
+[action_show子弹]
+#infoOnly:true
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/弹药显示.png
+text:弹药\n%{self.energy}\%{self.maxEnergy}
+description:剩余\共计\n目前弹匣中有的子弹数量
+buildSpeed:0s
+pos:-5
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if not self.energy(equalTo=0)
+
+[action_show磨损度]
+#infoOnly:true
+text:磨损度\n%{self.resource(type="msd")}/${int(core.radius*0.05*55)}
+description:磨损等级:0级\n无效果
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/磨损.png
+buildSpeed:0s
+pos:15
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type='msd') < 10*${core.radius*0.05}
+
+[action_show磨损度1]
+#infoOnly:true
+text:磨损度\n%{self.resource(type="msd")}/${int(core.radius*0.05*55)}
+description:磨损等级:1级\n轻度磨损\n转弯速度下降5%\n受到伤害时额外受到50点伤害
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/磨损-1.png
+buildSpeed:0s
+pos:15
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type='msd') >= 10*${core.radius*0.05} and self.resource(type='msd') < 20*${core.radius*0.05}
+
+[action_show磨损度2]
+#infoOnly:true
+text:磨损度\n%{self.resource(type="msd")}/${int(core.radius*0.05*55)}
+description:磨损等级:2级\n中度磨损\n转弯速度下降10%\n受到伤害时额外受到70点伤害\n攻击间隔增加0.1
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/磨损-2.png
+buildSpeed:0s
+pos:15
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type='msd') >= 20*${core.radius*0.05} and self.resource(type='msd') < 30*${core.radius*0.05}
+
+[action_show磨损度3]
+#infoOnly:true
+text:磨损度\n%{self.resource(type="msd")}/${int(core.radius*0.05*55)}
+description:磨损等级:3级\n严重磨损\n转弯速度下降20%\n受到伤害时额外受到100点伤害\n攻击间隔增加0.2
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/磨损-3.png
+buildSpeed:0s
+pos:15
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type='msd') >= 30*${core.radius*0.05} and self.resource(type='msd') < 40*${core.radius*0.05}
+
+[action_show磨损度4]
+#infoOnly:true
+text:磨损度\n%{self.resource(type="msd")}/${int(core.radius*0.05*55)}
+description:磨损等级:4级\n重度磨损\n转弯速度下降35%\n受到伤害时额外受到140点伤害\n攻击间隔增加0.35
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/磨损-4.png
+buildSpeed:0s
+pos:15
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type='msd') >= 40*${core.radius*0.05} and self.resource(type='msd') < 50*${core.radius*0.05}
+
+[action_show磨损度5]
+#infoOnly:true
+text:磨损度\n%{self.resource(type="msd")}/${int(core.radius*0.05*55)}
+description:磨损等级:5级\n极度磨损\n转弯速度下降55%\n受到伤害时额外受到200点伤害\n攻击间隔增加0.55
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/磨损-5.png
+buildSpeed:0s
+pos:15
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:if self.resource(type='msd') >= 50*${core.radius*0.05}
+
+[action_show燃烧值]
+#infoOnly:true
+text:燃烧点\n%{self.resource(type="rsd")}/${core.radius*2+20}
+description:到达满值则燃烧则燃烧,需要手动灭火
+buildSpeed:0s
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/fire_big.png
+pos:10
+displayType:infoOnlyNoBox
+isActive:false
+isVisible:true
+
+#---其他---
+
+[projectile_暴击]
+areaDamage:0
+areaRadius:0
+life:180
+tags:0
+speed:0
+targetGround:true
+image:NONE
+drawSize:0.00001
+friendlyFire:false
+explodeEffect:CUSTOM:null
+
+[action_自动上单]
+isVisible:if self.energy(greaterThan=0) and self.self.energy(lessThan=1)
+text:手动上弹
+description:你的弹容量大于0小于1\n出现这个情况可能是你的服务器卡了\n只需要点一下就可以恢复了
+autoTrigger:if self.energy(greaterThan=0) and self.self.energy(lessThan=1) and not self.hasUnitInTeam(withTag='能量',greaterThan=0,withinRange=170)
+buildSpeed:1s
+addResources:energy=-100
+pos:-4
+isGuiBlinking:true
+displayType:action
+
+[action_自修复]
+isVisible:if not self.hp(greaterThan=${core.maxHp*0.4}) and not self.hasFlag(id=11) or self.hasFlag(id=2) and not self.hasFlag(id=11)
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/齿轮1.png
+price:zxf=1
+whenBuilding_cannotMove:true
+text:使用自修复
+isActive:true
+isGuiBlinking:true
+buildSpeed:${6*core.radius*0.04}s
+ai_isHighPriority:true
+pos:-1.1
+description:使用一个自修复工具\n恢复1600血量并灭火
+displayType:action
+alsoTriggerAction:自修复1_o,自修复1_a,自修复2_o,自修复2_a,自修复3_o,自修复3_a
+
+[hiddenAction_自修复1_o]
+takeResources:hp=-1600
+takeResources_includeUnitsWithinRange:${core.radius+40}
+takeResources_includeUnitsWithinRange_team:own
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+[hiddenAction_自修复1_a]
+takeResources:hp=-1600
+takeResources_includeUnitsWithinRange:${core.radius+40}
+takeResources_includeUnitsWithinRange_team:ally
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+[hiddenAction_自修复2_o]
+takeResources:msd:20
+takeResources_includeUnitsWithinRange:${core.radius+40}
+takeResources_includeUnitsWithinRange_team:own
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+[hiddenAction_自修复2_a]
+takeResources:msd:20
+takeResources_includeUnitsWithinRange:${core.radius+40}
+takeResources_includeUnitsWithinRange_team:ally
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+[hiddenAction_自修复3_o]
+takeResources:rsd:20
+takeResources_includeUnitsWithinRange:${core.radius+40}
+takeResources_includeUnitsWithinRange_team:own
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+[hiddenAction_自修复3_a]
+takeResources:rsd:20
+takeResources_includeUnitsWithinRange:${core.radius+40}
+takeResources_includeUnitsWithinRange_team:ally
+takeResources_discardCollected:true
+takeResources_maxUnits:99999
+
+#---损坏---
+
+[hiddenAction_正常]
+autoTrigger:if self.hp(greaterThan=${core.maxHp*0.4}) and self.hasFlag(id=7)
+addResources:unsetFlag=7
+temporarilyRemoveTags:损坏
+
+[action_损坏]
+isVisible:if not self.hp(greaterThan=${core.maxHp*0.4})
+iconExtraImage:ROOT:[WarField][战争之地]/-shared-/-贴图-/禁止开火.png
+autoTrigger:if not self.hp(greaterThan=${core.maxHp*0.4}) and not self.tags(includes='损坏')
+text:损坏
+isActive:false
+temporarilyAddTags:损坏
+pos:-1
+description:它已经被损坏了，需要修复
+displayType:infoOnlyNoBox
+
+[projectile_炸1]
+areaDamage:${int(core.maxHp*0.5+core.armour*2}
+areaRadius:${int(core.radius+20)}
+shieldDamageMultiplier:2
+tags:炸膛
+targetGround_includeTargetHeight:true
+areaDamageNoFalloff:true
+targetGround:true
+speed:0.01
+life:0
+frame:5
+explodeOnEndOfLife:true
+friendlyFire:false
+color:#FFCB2E
+drawSize:1
+explodeEffect:NONE
+
+[turret_explode]
+x:0
+y:0
+invisible:true
+canShoot:false
+projectile:explode
+
+[projectile_explode]
+areaDamage:${int(core.maxHp*1.6+core.armour*10}
+areaRadius:${int(core.radius+30)}
+life:99
+instant:true
+speed:1
+tags:无法拦截
+largeHitEffect:true
+areaHitUnderwaterAlways:true
+areaHitAirAndLandAtSameTime:true
+targetGround:true
+areaExpandTime:35
+deflectionPower:-1
+friendlyFire:false
+explodeEffect:NONE
+
+#---效果---
+
+[effect_111]
+life:60
+hOffset:0
+dirOffset:0
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/heal.png
+scaleFrom:0
+scaleTo:5
+alpha:0.2
+alwayStartDirAtZero:true
+drawUnderUnits:true
+dirSpeed:0
+showInFog:true
+
+[effect_explodeStandard]
+createWhenOverLiquid:true
+
+[effect_null]
+alsoPlaySound:ROOT:[WarField][战争之地]/-shared-/-音效-/暴击.ogg:1.6,ROOT:[WarField][战争之地]/-shared-/-音效-/暴击2.ogg:1.6,ROOT:[WarField][战争之地]/-shared-/-音效-/暴击3.ogg:1.6,ROOT:[WarField][战争之地]/-shared-/-音效-/暴击4.ogg:1.6
+priority:critical
+life:0
+scaleFrom:0.001
+scaleTo:0.001
+physics:true
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/null.png
+
+[effect_trail]
+createWhenZoomedOut:false
+xOffsetRelative:0
+yOffsetRelative:0
+xSpeedRelativeRandom:0.1
+ySpeedRelativeRandom:0.1
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/trail.png
+life:40
+fadeOut:true
+attachedToUnit:false
+scaleFrom:0.6
+scaleTo:0.4
+alpha:0.5
+drawUnderUnits:true
+
+[effect_pyro]
+spawnChance:1
+life:60
+alpha:0
+alsoEmitEffects:CUSTOM:sparks*3,CUSTOM:sparks2*2
+alsoPlaySound:ROOT:[WarField][战争之地]/-shared-/-音效-/tankMainGun.ogg:0.2
+
+[effect_sparks]
+attachedToUnit:false
+life:150
+scaleFrom:0.2
+scaleTo:0.05
+physics:true
+xSpeedRelativeRandom:1
+ySpeedRelativeRandom:1
+hSpeed:1
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/spark.png
+
+[effect_sparks2]
+attachedToUnit:false
+life:150
+scaleFrom:0.3
+scaleTo:0.04
+physics:true
+xSpeedRelativeRandom:4
+ySpeedRelativeRandom:4
+hSpeed:1
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/spark.png
+
+[effect_smokesly]
+scaleFrom:0.12
+scaleTo:0.22
+alpha:1
+drawUnderUnits:false
+liveAfterAttachedDies:false
+hSpeed:0.025
+dirOffsetRandom:180
+yOffsetRelative:-2
+ySpeedRelative:0.13
+xSpeedRelativeRandom:0.09
+ySpeedRelativeRandom:0.11
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/smoke_white.png
+life:60
+fadeOut:true
+attachedToUnit:false
+
+[effect_炸膛]
+life:35
+attachedToUnit:true
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/explode_big2.png
+scaleFrom:1.6
+scaleTo:1.6
+total_frames:14
+animateFrameStart:0
+animateFrameEnd:3
+animateFrameSpeed:0.35
+fadeOut:false
+#adjust the position of the effect
+yOffsetRelative:0
+xOffsetRelative:0
+
+[effect_heal]
+life:55
+scaleFrom:0.5
+scaleTo:0.5
+fadeOut:true
+fadeInTime:4
+xOffsetRelativeRandom:2
+yOffsetRelativeRandom:0
+yOffsetRelative:2
+hOffsetRandom:0.4
+attachedToUnit:true
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/explosion_flame2.png
+alwayStartDirAtZero:true
+alpha:2
+frameIndex:1
+total_frames:27
+animateFrameStart:0
+animateFrameEnd:13
+animateFrameSpeed:0.1
+animateFrameSpeedRandom:0.02
+
+[effect_ambientSmoke]
+createWhenZoomedOut: false
+stripIndex: effects
+frameIndex: 0
+
+life: 120
+fadeOut: true
+attachedToUnit: false
+color: #646464
+fadeInTime: 15
+scaleFrom: 0.75
+scaleTo: 3
+alpha: 1.2
+drawUnderUnits:false
+hSpeed:0.4
+xSpeedAbsolute: -0.2
+hOffsetRandom:0.15
+yOffsetRelative: -2
+
+dirOffsetRandom:180
+
+shadow:true
+xOffsetRelativeRandom: 1
+yOffsetRelativeRandom: 1
+xSpeedAbsoluteRandom:0.05
+ySpeedAbsoluteRandom:0.1
+atmospheric: true
+
+[effect_smallLightGround]
+createWhenOverLiquid:false
+life:10
+drawUnderUnits: true
+image: SHARED:light_50.png
+scaleFrom: 0.3
+scaleTo: 0.3
+color:#ffd500
+
+[effect_lightGround]
+createWhenOverLiquid:false
+
+life:15
+drawUnderUnits: true
+image: SHARED:light_50.png
+scaleFrom: 0.7
+scaleTo: 0.7
+color:#ffd500
+
+[effect_dirt]
+createWhenOverLiquid:false
+life: 120
+lifeRandom: 30
+alsoEmitEffects: CUSTOM:dirt2*3
+image: ROOT:[WarField][战争之地]/-shared-/-贴图-/dirt.png
+physics: true
+physicsGravity: 0.5
+hSpeed:2
+hSpeedRandom: 0.5
+ySpeedRelativeRandom: 0.5
+xSpeedRelativeRandom: 0.5
+
+[effect_dirt2]
+createWhenOverLiquid:false
+life: 120
+lifeRandom: 30
+image: ROOT:[WarField][战争之地]/-shared-/-贴图-/dirt.png
+physics: true
+physicsGravity: 0.5
+hSpeed:2
+hSpeedRandom: 0.5
+ySpeedRelativeRandom: 0.5
+xSpeedRelativeRandom: 0.5
+
+[effect_dirtySmoke]
+
+createWhenOverLiquid:false
+life: 100
+lifeRandom: 30
+alsoEmitEffects: CUSTOM:dirtySmoke2*3
+attachedToUnit: false
+image: ROOT:[WarField][战争之地]/-shared-/-贴图-/dirtySmoke.png
+scaleFrom: 1
+scaleTo: 2
+alpha: 0.6
+ySpeedRelativeRandom: 0.15
+xSpeedRelativeRandom: 0.15
+dirSpeedRandom: 0.2
+hSpeed: 1
+hSpeedRandom: 0.25
+atmospheric: true
+physics: true
+physicsGravity: 0.25
+imageShadow: ROOT:[WarField][战争之地]/-shared-/-贴图-/smoke.png
+shadow: true
+
+[effect_dirtySmoke2]
+
+createWhenOverLiquid:false
+life: 100
+lifeRandom: 30
+attachedToUnit: false
+image: ROOT:[WarField][战争之地]/-shared-/-贴图-/dirtySmoke.png
+scaleFrom: 1
+scaleTo: 2
+alpha: 0.6
+ySpeedRelativeRandom: 0.15
+xSpeedRelativeRandom: 0.15
+dirSpeedRandom: 0.2
+hSpeed: 1
+hSpeedRandom: 0.25
+atmospheric: true
+physics: true
+physicsGravity: 0.25
+imageShadow: ROOT:[WarField][战争之地]/-shared-/-贴图-/smoke.png
+shadow: true
+
+[effect_smallYellowExplosion]
+life: 15
+
+scaleFrom: 0.45
+scaleTo: 0.45
+
+attachedToUnit: false
+atmospheric: true
+image:ROOT:[WarField][战争之地]/-shared-/-贴图-/energeticSpark2.png
+
+total_frames: 14
+
+dirOffsetRandom: 180
+
+animateFrameStart: 0
+animateFrameEnd: 13
+#animateFramePingPong: true
+animateFrameSpeed: 0.5
+
+
+
+
+[effect_wave]
+life:150
+image: ROOT:[WarField][战争之地]/-shared-/-贴图-/shockwave.png
+scaleFrom: 0
+scaleTo: 0.8
+createWhenOverLand: false
+attachedToUnit:false
+
+[effect_waterSplash1]
+life: 100
+image: ROOT:[WarField][战争之地]/-shared-/-贴图-/bubbles.png
+ySpeedAbsolute: 0.1
+ySpeedAbsoluteRandom: 0.05
+xSpeedAbsolute: 0.1
+xSpeedAbsoluteRandom: 0.05
+yOffsetRelativeRandom: 3
+xOffsetRelativeRandom: 3
+dirOffset:45
+createWhenOverLand: false
+attachedToUnit:false
+imageShadow: ROOT:[WarField][战争之地]/-shared-/-贴图-/bubbles.png
+shadow: true
+
+[effect_waterSplash2]
+life: 100
+image: ROOT:[WarField][战争之地]/-shared-/-贴图-/bubbles.png
+ySpeedAbsolute: 0.1
+ySpeedAbsoluteRandom: 0.05
+ySpeedAbsolute: -0.1
+ySpeedAbsoluteRandom: 0.05
+yOffsetRelativeRandom: 3
+xOffsetRelativeRandom: -3
+dirOffset:135
+attachedToUnit:false
+createWhenOverLand: false
+imageShadow: ROOT:[WarField][战争之地]/-shared-/-贴图-/bubbles.png
+shadow: true
+
+[effect_waterSplash3]
+life: 100
+image: ROOT:[WarField][战争之地]/-shared-/-贴图-/bubbles.png
+ySpeedAbsolute: -0.1
+ySpeedAbsoluteRandom: 0.05
+yOffsetRelativeRandom: -3
+xOffsetRelativeRandom: 0
+dirOffset:45
+createWhenOverLand: false
+imageShadow: ROOT:[WarField][战争之地]/-shared-/-贴图-/bubbles.png
+attachedToUnit:false
+shadow: true
+
+[effect_waterSplash4]
+life: 100
+image: ROOT:[WarField][战争之地]/-shared-/-贴图-/bubbles.png
+scaleFrom: 0.4
+scaleTo: 1.2
+physics: true
+physicsGravity: 0.4
+hSpeed: 1
+hSpeedRandom: 0.5
+ySpeedRelativeRandom: 0.25
+xSpeedRelativeRandom: 0.25
+attachedToUnit:false
+createWhenOverLand: false
+imageShadow: ROOT:[WarField][战争之地]/-shared-/-贴图-/bubbles.png
+shadow: true
+
+[effect_waterSplash5]
+life: 100
+image: ROOT:[WarField][战争之地]/-shared-/-贴图-/bubbles.png
+scaleFrom: 0.4
+scaleTo: 1.2
+physics: true
+physicsGravity: 0.4
+hSpeed: 1.5
+hSpeedRandom: 0.75
+attachedToUnit:false
+ySpeedRelativeRandom: 0.25
+xSpeedRelativeRandom: 0.25
+createWhenOverLand: false
+imageShadow: ROOT:[WarField][战争之地]/-shared-/-贴图-/bubbles.png
+shadow: true
+
+
+
+#----调试中----
+
+#---生命调试---
+
+[action_生命]
+text:生命选项
+displayType:queueUnit
+pos:1000
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if not self.hasFlag(id=21) and self.hasUnitInTeam(withTag="调试")
+addResources:setFlag=21,unsetFlag:22,unsetFlag:23
+
+[action_生命关门]
+text:关闭生命选项
+displayType:queueUnit
+pos:1000
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=21)and self.hasUnitInTeam(withTag="调试")
+addResources:unsetFlag=21,unsetFlag:22,unsetFlag:23
+
+[action_生命加1]
+text:增加1生命
+displayType:action
+pos:1004
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=21) and self.hasUnitInTeam(withTag="调试")
+addResources:hp=1
+
+[action_生命加5]
+text:增加10生命
+displayType:action
+pos:1004
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=21) and self.hasUnitInTeam(withTag="调试")
+addResources:hp=10
+
+[action_生命加100]
+text:增加100生命
+displayType:action
+pos:1004
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=21) and self.hasUnitInTeam(withTag="调试")
+addResources:hp=100
+
+[action_生命加1000]
+text:增加1000生命
+displayType:action
+pos:1004
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=21) and self.hasUnitInTeam(withTag="调试")
+addResources:hp=1000
+
+[action_生命减1]
+text:减少1生命
+displayType:action
+pos:1004
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=21) and self.hasUnitInTeam(withTag="调试")
+addResources:hp=-1
+
+[action_生命减10]
+text:减少10生命
+displayType:action
+pos:1004
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=21) and self.hasUnitInTeam(withTag="调试")
+addResources:hp=-10
+
+[action_生命减100]
+text:减少100生命
+displayType:action
+pos:1004
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=21) and self.hasUnitInTeam(withTag="调试")
+addResources:hp=-100
+
+[action_生命减1000]
+text:减少1000生命
+displayType:action
+pos:1004
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=21) and self.hasUnitInTeam(withTag="调试")
+addResources:hp=-1000
+
+#---能量调试---
+
+[action_能量]
+text:能量选项
+displayType:queueUnit
+pos:1000
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if not self.hasFlag(id=23) and self.hasUnitInTeam(withTag="调试")
+addResources:setFlag=23,unsetFlag:22,unsetFlag:21
+
+[action_能量关门]
+text:关闭能量选项
+displayType:queueUnit
+pos:1000
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=23)and self.hasUnitInTeam(withTag="调试")
+addResources:unsetFlag=23,unsetFlag:22,unsetFlag:21
+
+[action_能量加1]
+text:增加1能量
+displayType:action
+pos:1002
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=23) and self.hasUnitInTeam(withTag="调试")
+addResources:energy=1
+
+[action_能量加5]
+text:增加5能量
+displayType:action
+pos:1002
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=23) and self.hasUnitInTeam(withTag="调试")
+addResources:energy=5
+
+[action_能量加10]
+text:增加10能量
+displayType:action
+pos:1002
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=23) and self.hasUnitInTeam(withTag="调试")
+addResources:energy=10
+
+[action_能量加100]
+text:增加100能量
+displayType:action
+pos:1002
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=23) and self.hasUnitInTeam(withTag="调试")
+addResources:energy=100
+
+[action_能量减1]
+text:减少1能量
+displayType:action
+pos:1002
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=23) and self.hasUnitInTeam(withTag="调试")
+addResources:energy=-1
+
+[action_能量减5]
+text:减少5能量
+displayType:action
+pos:1002
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=23) and self.hasUnitInTeam(withTag="调试")
+addResources:energy=-5
+
+[action_能量减10]
+text:减少10能量
+displayType:action
+pos:1002
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=23) and self.hasUnitInTeam(withTag="调试")
+addResources:energy=-10
+
+[action_能量减100]
+text:减少100能量
+displayType:action
+pos:1002
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=23) and self.hasUnitInTeam(withTag="调试")
+addResources:energy=-100
+
+#---特殊调试---
+
+[action_特殊]
+text:特殊选项
+displayType:queueUnit
+pos:1000
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if not self.hasFlag(id=22) and self.hasUnitInTeam(withTag="调试")
+addResources:setFlag=22,unsetFlag:21,unsetFlag:23
+
+[action_特殊关门]
+text:关闭特殊选项
+displayType:queueUnit
+pos:1000
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=22)and self.hasUnitInTeam(withTag="调试")
+addResources:unsetFlag=22,unsetFlag:21,unsetFlag:23
+
+[action_燃烧]
+text:使单位燃烧
+displayType:action
+pos:1003
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=22) and self.hasUnitInTeam(withTag="调试")
+addResources:setFlag=2,rsd=${core.radius*2+20}
+
+[action_灭火]
+text:停止燃烧
+displayType:action
+pos:1003
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=22) and self.hasUnitInTeam(withTag="调试")
+addResources:unsetFlag=2,rsd=${core.radius*-2-20}
+
+[action_负面]
+text:负面属性
+displayType:action
+pos:1003
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=22) and self.hasUnitInTeam(withTag="调试")
+addResources:lx:10,fs:10
+
+[action_负面去除]
+text:去除负面属性
+displayType:action
+pos:1003
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=22) and self.hasUnitInTeam(withTag="调试")
+setResourcesWithLogic:lx:0,fs:0
+
+[action_使损坏]
+text:使单位损坏
+displayType:action
+pos:1003
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=22) and self.hasUnitInTeam(withTag="调试")
+addResources:setFlag=7,hp=99999
+alsoTriggerAction:使损坏2
+
+[action_使损坏2]
+text:使单位损坏
+displayType:action
+pos:1003
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:false
+addResources:hp=${int(core.maxHp*-0.6)}
+
+[action_修复]
+text:使单位恢复
+displayType:action
+pos:1003
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=22) and self.hasUnitInTeam(withTag="调试")
+addResources:unsetFlag=7,hp=99999
+
+[action_使磨损]
+text:增加5磨损
+displayType:action
+pos:1003
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=22) and self.hasUnitInTeam(withTag="调试")
+addResources:msd=5
+
+[action_减少磨损]
+text:减少5磨损
+displayType:action
+pos:1003
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=22) and self.hasUnitInTeam(withTag="调试")
+addResources:msd=-5
+
+[action_增加等级]
+text:加1等级
+displayType:action
+pos:1003
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=22) and self.hasUnitInTeam(withTag="调试")
+addResourcesWithLogic:dj:1
+addResources:hfjs:2
+
+[action_减少等级]
+text:减1等级
+displayType:action
+pos:1003
+buildSpeed:0s
+alwaysSinglePress:true
+isVisible:if self.hasFlag(id=22) and self.hasUnitInTeam(withTag="调试")
+addResourcesWithLogic:dj:-1
+addResources:hfjs:2
+
+[action_转换llll]
+text:变成敌对
+price:0
+pos:1008
+buildSpeed:0
+switchToAggressiveTeam:true
+displayType:action
+isVisible:if self.hasFlag(id=22) and self.hasUnitInTeam(withTag="调试")
+alwaysSinglePress:true
+
+[action_转换2llll]
+text:变成中立
+price:0
+pos:1008
+buildSpeed:0
+switchToNeutralTeam:true
+isVisible:if self.hasFlag(id=22) and self.hasUnitInTeam(withTag="调试")
+displayType:action
+alwaysSinglePress:true
+
+#----1~6----
+[projectile_1]
+@copyFromSection:projectile_test
+[projectile_2]
+@copyFromSection:projectile_test
+[projectile_3]
+@copyFromSection:projectile_test
+[projectile_4]
+@copyFromSection:projectile_test
+[projectile_5]
+@copyFromSection:projectile_test
+[projectile_6]
+@copyFromSection:projectile_test
+#----1~6l----
+[projectile_1l]
+@copyFromSection:projectile_test
+[projectile_2l]
+@copyFromSection:projectile_test
+[projectile_3l]
+@copyFromSection:projectile_test
+[projectile_4l]
+@copyFromSection:projectile_test
+[projectile_5l]
+@copyFromSection:projectile_test
+[projectile_6l]
+@copyFromSection:projectile_test
+#----l1~6----
+[projectile_l1]
+@copyFromSection:projectile_test
+[projectile_l2]
+@copyFromSection:projectile_test
+[projectile_l3]
+@copyFromSection:projectile_test
+[projectile_l4]
+@copyFromSection:projectile_test
+[projectile_l5]
+@copyFromSection:projectile_test
+[projectile_l6]
+@copyFromSection:projectile_test
+
+#--暴击--
+
+[projectile_暴击]
+@copyFromSection:projectile_test2
+[projectile_暴击1]
+@copyFromSection:projectile_test2
+[projectile_暴击2]
+@copyFromSection:projectile_test2
+[projectile_暴击3]
+@copyFromSection:projectile_test2
+[projectile_暴击4]
+@copyFromSection:projectile_test2
+[projectile_暴击5]
+@copyFromSection:projectile_test2
+[projectile_暴击6]
+@copyFromSection:projectile_test2
+#----1~6l----
+[projectile_暴击1l]
+@copyFromSection:projectile_test2
+[projectile_暴击2l]
+@copyFromSection:projectile_test2
+[projectile_暴击3l]
+@copyFromSection:projectile_test2
+[projectile_暴击4l]
+@copyFromSection:projectile_test2
+[projectile_暴击5l]
+@copyFromSection:projectile_test2
+[projectile_暴击6l]
+@copyFromSection:projectile_test2
+#----l1~6----
+[projectile_暴击l1]
+@copyFromSection:projectile_test2
+[projectile_暴击l2]
+@copyFromSection:projectile_test2
+[projectile_暴击l3]
+@copyFromSection:projectile_test2
+[projectile_暴击l4]
+@copyFromSection:projectile_test2
+[projectile_暴击l5]
+@copyFromSection:projectile_test2
+[projectile_暴击l6]
+@copyFromSection:projectile_test2

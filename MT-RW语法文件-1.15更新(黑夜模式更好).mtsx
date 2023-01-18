@@ -1,0 +1,109 @@
+//Made by RustedWiki (https://rustedwarfare.org/)
+//License: CC BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh)
+//Version: 1.15
+//更新说明：1.15p7~1.15版本,王某人补充;补充内容大致如下: 1.增加字串符高亮:增加路径点,后面的路径点类型;以及自动触发事件的后面的事件;设置单位状态后面的状态类型,与原来'true'的高亮颜色相同 2.上一个版本输漏了一个代码:withTag,这个版本已更正 3.对于中括号小括号和引号做了不同的颜色,中括号的颜色比小括号的颜色亮一点,而引号则为不同颜色 4.新增语法高亮:memory,对于memory的类型以及更快捷的@memory赋值法,都有了高亮 5.将运算法则以及判断符号与之前的小括号,中括号分开,并更改其颜色 6.新增在使用${}引用时,新版本的decal节高亮 7.新增对于原版中自带的音效以及贴图效果集的高亮 8.新增对于行动类型的高亮(displayType:action...) 9.新增在单引号双引号内的字符串高亮(原作者更新) 10.新增图像节图层类型代码高亮(wreaks,bottom,ground...) 11.新增动画节动画触发条件类型的高亮(move,attack,idle...) 12.新增decal节的图层类型高亮(shadow,beforeBody...)
+//补充说明:如果后续时间充裕,我会增加部分代码中特殊关键词(autoTriggerCheckRate:every8Frames...)的专属高亮
+//记得开黑夜模式呦~
+//Find latest update at http://rts.moe/rtsmodhightlight
+{
+	name: ["INI File (Rusted Warfare)", ".ini", ".template", ".md"]
+	colors: [
+		"section", #871095, #fd80ff
+		"section_name", #F50000, #ff5551
+		"background", #fce8eb, #403335
+        "shortcut_key", #A92A2A, #f2d38d
+		"shortcut_value", #7ac3fa , #99bbd1
+		"shortcut_type", #7798f3, #b4919b
+		"key", #067D17, #6cd161
+		"value", #75D8AE, #b7939d
+		"value2", #75D8AE, #EDBCC9
+		"hex_color", #FB7B7f, #FDA6C0
+		"boolean", #A92A2A, #FFC83F
+		"uppercase_keywords", #7798f3, #B9DEF7
+		"numbers", #1750EB, #7ac3fa
+		"logical_keywords", #deae12, #fff236
+		"logical_keywords2", #f2bd13, #deae12
+		"symbol", #deae12, #AD99B7
+		"symbol2", #deae12, #F1D7FF
+		"symbol3", #99B7AD, #CDEEE3
+		"args", #ae8abe #58908a
+		"reference", #58908A #f2d38d
+		"quote", #359543 , #e5d76e
+	]
+	comment: {startsWith: "\n#"}
+	comment: {startsWith: "#"}
+	lineBackground: {match: /\[.+\]/, color: "background"}
+	contains: [
+	{
+		color: "comment"
+		start : {match: /(?m)^\s*"""/}
+		end: {match: /"""|$/}
+		contains: [
+			{match: /\./}
+		]
+    }
+    {
+		start: {match: /\@\w+\ /, 0:"shortcut_key"}
+		end: {match:/\n/}
+		contains: [ 
+			{match: keywordsToRegex("ROOT boolean number float unit string "), 0: "shortcut_type"}
+		]
+		color: "shortcut_value"
+    }
+	{
+		start: {match: /\[.+\_/, 0:"section"}
+		end: {match: /\]/, 0:"section"}
+		color: "section_name"
+	}
+    {match: /\[.+\]/, 0: "section"}
+        {
+            color: "value"
+            start: {match: /(?m)^[\t ]*(?:[^\s\\:=]|\\.)+[\t ]*[:=]/, 0: "key"}
+            end: {match: /(?m)$/}
+            contains: [
+            	//strings '
+            	{
+            		color: "quote"
+            		start: {match: /'/}
+            		end: {match: /(?m)'|$/}
+            		contains: [
+						{builtin: #ESCAPED_CHAR#}
+            		]
+        		}
+            	//strings "
+            	{
+            		color: "quote"
+            		start: {match: /"/}
+            		end: {match: /(?m)"|$/}
+            		contains: [
+							{builtin: #ESCAPED_CHAR#}
+            		]
+        		}
+            	{
+					color: "label"
+					start : {match: /"""/, 0:"value"}
+					end: {match: /"""/, 0:"value"}
+					contains: [
+						{match: keywordsToRegex("ROOT boolean number float unit string"), 0: "data_type"}
+						{match: keywordsToRegex("true false"), 0: "boolean"}
+						{match: keywordsToRegex(", : -"), 0:"symbol"}
+ 					]
+ 				}
+                {builtin: #ESCAPED_CHAR#}
+                {match: /(?i)\b(?:0(?:b[01]+|x[\da-f]+)L?|\d+(?:\.\d+(?:e\d+)?F?|[FL]?))(\b|s)/, 0: "numbers"}
+                {match: keywordsToRegex("true false own neutral ally enemy any move attackMove guard loadInto loadUp attack reclaim repair touchTarget build follow setPassiveTarget created completeAndActive destroyed killedAnyUnit queuedUnitFinished queueItemAdded queueItemCancelled teleported tookDamage touchTargetSuccess newWaypointGivenByPlayer teamChanged transportingNewUnit transportUnloadedOrRemovedUnit maxHp hp maxShield shield shield dregen maxEnergy energy armor armour mass shootDelayMultiplier shootDamageMultiplier moveSpeed maxTurnSpeed maxAttackRange nanoFactorySpeed targetHeight bug_attack bug_die building_explode cannon_firing clickclick_add click_remove firing3 firing4 gun_fire interface_error large_gun_fire1 large_gun_fire2 laser_deflect laser_deflect2 lighting_burst message missile_fire missile_hit move nuke_explode nuke_launch plasma_fire plasma_fire2 tank_firing unit_explode unit_explode_old warning light_50 shockwave shockwave_large effects explode_big	flame dust smoke_black fire lava_bubble effects2 plasma_shot explode_bits explode_big2 explode_bits_bug projectiles projectiles2 effects3 none smoke shockwave large small medium smallExplosion largeExplosion noneExplosion verysmall normal largeUnit building buildingNoShockwaveOrSmoke verylargeBuilding"), 0: "boolean"}
+                {match: /#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6})/, 0: "hex_color"}
+                {match: keywordsToRegex("CUSTOM: SHARED: ROOT: CORE: SHADOW: "), 0: "uppercase_keywords"}
+				{match: keywordsToRegex("ROOT CUSTOM SHARED CORE SHADOW NONE LAND BUILDING AIR WATER HOVER OVER_CLIFF OVER_CLIFF_WATER none rally upgrade queueUnit building action infoOnly infoOnlyNoBox shadow beforeBody afterBody onTop beforeUI wreaks underwater bottom ground ground2 experimentals air top move attack idle underConstruction underConstructionWithLinkedBuiltTime queuedUnits Unknown"), 0: "uppercase_keywords"}
+				{match: keywordsToRegex("if and not or"), 0: "logical_keywords"}
+				{match: keywordsToRegex("< > <= >= = == != + - / * % $ **"), 0: "logical_keywords2"}
+				{match: keywordsToRegex("} {"), 0:"symbol2"}
+				{match: keywordsToRegex(", \" \' "), 0:"symbol3"}
+				{match: keywordsToRegex(") ("), 0:"symbol"}
+				{match: keywordsToRegex("eventSource. attachment. transporting. attacking. lastDamagedBy. parent. customTarget1. customTarget2. nearestUnit. globalSearchForFirstUnit. activeWaypointTarget. core. decal. graphics. attack. movement. ai. self. parent. memory. animation_ attachment_ nullUnit section. float number boolean Boolean unit string"), 0:"reference"}
+				{match: keywordsToRegex("thisActionTarget== eventSource== includes== type== greaterThan== lessThan== equalTo== withinRange== incompleteBuildings== factoryQueue== withinSeconds== laterThanSeconds== relation== setFlag== hasFlag== withTag== unsetFlag== id== slot== empty== full== shield== energy== ammo== credits== credits=="), 0:"args"}
+				{match: keywordsToRegex("thisActionTarget= eventSource= includes= type= greaterThan= lessThan= equalTo= withinRange= incompleteBuildings= factoryQueue= withinSeconds= laterThanSeconds= relation= setFlag= unsetFlsg= hasFlag= withTag= unsetFlag= id= slot= empty= full= shield= energy= ammo= credits= credits="), 0:"args"}
+            ]
+        }
+    ]
+}
